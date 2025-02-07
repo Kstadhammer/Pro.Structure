@@ -1,6 +1,8 @@
 @model ProjectViewModel
 @{
     ViewData["Title"] = "Create Project";
+    var today = DateTime.Today;
+    var monthLater = today.AddMonths(1);
 }
 
 <div class="d-flex justify-content-between align-items-center mb-4">
@@ -26,19 +28,21 @@
 
                     <div class="mb-3">
                         <label asp-for="StartDate" class="form-label"></label>
-                        <input asp-for="StartDate" class="form-control" type="date" />
+                        <input asp-for="StartDate" class="form-control" type="date"
+                            value="@today.ToString("yyyy-MM-dd")" />
                         <span asp-validation-for="StartDate" class="text-danger"></span>
                     </div>
 
                     <div class="mb-3">
                         <label asp-for="EndDate" class="form-label"></label>
-                        <input asp-for="EndDate" class="form-control" type="date" />
+                        <input asp-for="EndDate" class="form-control" type="date"
+                            value="@monthLater.ToString("yyyy-MM-dd")" />
                         <span asp-validation-for="EndDate" class="text-danger"></span>
                     </div>
 
                     <div class="mb-3">
                         <label asp-for="StatusId" class="form-label"></label>
-                        <select asp-for="StatusId" class="form-select" asp-items="ViewBag.Statuses">
+                        <select asp-for="StatusId" class="form-select" asp-items="@(ViewBag.Statuses as SelectList)">
                             <option value="">-- Select Status --</option>
                         </select>
                         <span asp-validation-for="StatusId" class="text-danger"></span>
@@ -70,7 +74,7 @@
 
                     <div class="mb-3">
                         <label asp-for="CustomerId" class="form-label"></label>
-                        <select asp-for="CustomerId" class="form-select" asp-items="ViewBag.Customers">
+                        <select asp-for="CustomerId" class="form-select" asp-items="@(ViewBag.Customers as SelectList)">
                             <option value="">-- Select Customer --</option>
                         </select>
                         <span asp-validation-for="CustomerId" class="text-danger"></span>
@@ -78,7 +82,8 @@
 
                     <div class="mb-3">
                         <label asp-for="ProjectManagerId" class="form-label"></label>
-                        <select asp-for="ProjectManagerId" class="form-select" asp-items="ViewBag.ProjectManagers">
+                        <select asp-for="ProjectManagerId" class="form-select"
+                            asp-items="@(ViewBag.ProjectManagers as SelectList)">
                             <option value="">-- Select Project Manager --</option>
                         </select>
                         <span asp-validation-for="ProjectManagerId" class="text-danger"></span>
