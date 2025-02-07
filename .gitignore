@@ -146,4 +146,8 @@ Thumbs.db
 
 # IDE specific files
 *.swp
-*.swo 
+*.swo
+
+### Assignment Files
+assignment.md
+feedbackfromteacher.md 
