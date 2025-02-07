@@ -2,6 +2,61 @@
 
 A comprehensive project management system built with .NET 9.0, implementing modern development practices, clean architecture principles, and a responsive dark mode UI.
 
+## Assignment Requirements
+
+### Required Features (G)
+- [x] Frontend Application
+  - [x] Project listing page
+  - [x] Project creation page
+  - [x] Project edit/update page
+
+- [x] Class Library Implementation
+  - [x] Entity Framework Core - Code First
+  - [x] SQLite database implementation
+  - [x] Multiple entities/tables (Projects, Customers, etc.)
+  - [x] Service layer implementation
+  - [x] Repository pattern implementation
+  - [x] Dependency Injection
+  - [x] Single Responsibility Principle (SRP)
+
+### Advanced Features (VG)
+- [x] Generic Base Repository
+- [x] Extended Entity Model
+  - [x] Customer entity
+  - [x] Project Manager entity
+  - [x] Status entity
+  - [x] Project entity with relationships
+- [x] Comprehensive Service Layer
+  - [x] CRUD operations for all entities
+  - [x] Business logic implementation
+- [x] SOLID Principles Implementation
+- [x] Factory Pattern Implementation
+- [x] Asynchronous Operations
+- [x] Transaction Management
+
+## Implementation Details
+
+### Personal Contributions (80%)
+- Complete backend architecture design
+- Database schema and relationships
+- Entity Framework Core implementation
+- Repository and Service layer patterns
+- Business logic implementation
+- Factory pattern implementation
+- Transaction management
+- API endpoint design
+- Core validation logic
+- Project structure setup
+- Dark mode implementation
+
+### AI-Assisted Components (20%)
+- Frontend UI components and styling
+- Bootstrap integration
+- Form validation scripts
+- Documentation generation
+- Code optimization suggestions
+- Bug fixes and improvements
+
 ## Features
 
 ### Core Functionality
