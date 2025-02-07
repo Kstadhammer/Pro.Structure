@@ -36,26 +36,49 @@ A comprehensive project management system built with .NET 9.0, implementing mode
 
 ## Implementation Details
 
-### Personal Contributions (80%)
-- Complete backend architecture design
-- Database schema and relationships
-- Entity Framework Core implementation
-- Repository and Service layer patterns
-- Business logic implementation
-- Factory pattern implementation
-- Transaction management
-- API endpoint design
-- Core validation logic
-- Project structure setup
-- Dark mode implementation
+### Personal Contributions (50%)
+- Backend Architecture & Design
+  - Designed and implemented the core domain entities and interfaces
+  - Created the repository pattern implementation
+  - Developed the service layer with business logic
+  - Set up Entity Framework Core with SQLite integration
+  - Implemented dependency injection and service registration
+- Database Design & Management
+  - Designed the database schema and relationships
+  - Created migrations and seeding functionality
+  - Implemented data access patterns and optimizations
+- Business Logic Implementation
+  - Developed core business rules and validations
+  - Implemented project status workflow logic
+  - Created project manager availability tracking
+  - Built customer relationship management features
 
-### AI-Assisted Components (20%)
-- Frontend UI components and styling
-- Bootstrap integration
-- Form validation scripts
-- Documentation generation
-- Code optimization suggestions
-- Bug fixes and improvements
+### AI-Assisted Components (50%)
+- Frontend Development
+  - Implementation of responsive Bootstrap-based UI
+  - Dark mode theming and customization
+  - Status badge styling and visual components
+  - Form validation and user input handling
+- Documentation & Code Organization
+  - README.md documentation and structure
+  - Code comments and documentation
+  - Project structure organization
+  - API documentation with Swagger
+- UI/UX Enhancements
+  - Responsive design implementation
+  - Dark/light mode toggle functionality
+  - Interactive status badges and indicators
+  - Form validation feedback
+- Code Quality & Optimization
+  - Code refactoring suggestions
+  - Performance optimization recommendations
+  - Best practices implementation
+  - Error handling improvements
+- Testing & Debugging
+  - Bug identification and fixes
+  - Testing strategy suggestions
+  - Error handling patterns
+  - Edge case handling
 
 ## Features
 
