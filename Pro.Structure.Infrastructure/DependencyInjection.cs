@@ -14,7 +14,7 @@ namespace Pro.Structure.Infrastructure;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddInfrastructure(
+    public static async Task<IServiceCollection> AddInfrastructureAsync(
         this IServiceCollection services,
         IConfiguration configuration
     )
@@ -26,6 +26,16 @@ public static class DependencyInjection
                 b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)
             )
         );
+
+        // Get the service provider
+        var serviceProvider = services.BuildServiceProvider();
+
+        // Get the DbContext instance
+        using var scope = serviceProvider.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+        // Apply migrations and seed data
+        await ApplicationDbContextSeed.SeedAsync(context);
 
         // Repositories
         services.AddScoped<IProjectRepository, ProjectRepository>();
