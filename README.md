@@ -10,122 +10,64 @@ A comprehensive project management system built with .NET 9.0, implementing mode
 - Service rate and billing management
 - Status tracking for projects
 - Modern web interface with responsive design
+- RESTful API for system integration
+
+## Project Structure
+
+The solution follows Clean Architecture principles and is organized into the following projects:
+
+### Pro.Structure.Core
+Core domain layer containing business entities, interfaces, and models. See [Core README](Pro.Structure.Core/README.md) for details.
+
+### Pro.Structure.Infrastructure
+Implementation of data access and business logic. See [Infrastructure README](Pro.Structure.Infrastructure/README.md) for details.
+
+### Pro.Structure.Web
+Main web interface with MVC pattern. See [Web README](Pro.Structure.Web/README.md) for details.
+
+### Pro.Structure.Web.Api
+RESTful API interface. See [Web.Api README](Pro.Structure.Web.Api/README.md) for details.
 
 ## Technical Stack
 
 - .NET 9.0
-- Entity Framework Core
-- SQLite Database
+- Entity Framework Core with SQLite
+- ASP.NET Core MVC & Web API
+- Bootstrap 5.3.3
 - Clean Architecture
 - SOLID Principles
 - Factory Pattern
-- Repository Pattern
-- Generic Base Classes
-- Async/Await Implementation
-- ASP.NET Core MVC
-- Bootstrap 5
-- jQuery
-
-## Project Structure
-
-The solution follows a clean architecture pattern with four main projects:
-
-- **Pro.Structure.Core**: Contains domain models, interfaces, and business logic definitions
-  - Entities
-  - Interfaces
-  - Models (DTOs)
-  - Factories
-
-- **Pro.Structure.Infrastructure**: Implements data access and business logic
-  - Entity Framework Core configuration
-  - Repositories
-  - Services
-  - Database context
-  - Migrations
-
-- **Pro.Structure.Web.Api**: Provides RESTful API endpoints
-  - Controllers
-  - DTOs
-  - Swagger documentation
-  - CORS configuration
-
-- **Pro.Structure.Web**: Web interface (MVC)
-  - Controllers
-  - Views
-  - ViewModels
-  - Frontend assets
-  - User interface
 
 ## Getting Started
 
-### Prerequisites
-
-- .NET 9.0 SDK
-- Visual Studio 2022 or JetBrains Rider
-- SQLite
-
-### Setup
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/Kstadhammer/Pro.Structure.git
-   ```
-
-2. Navigate to the project directory:
-   ```bash
-   cd Pro.Structure
-   ```
-
-3. Restore NuGet packages:
+1. Clone the repository
+2. Ensure .NET 9.0 SDK is installed
+3. Run the following commands in the solution directory:
    ```bash
    dotnet restore
-   ```
-
-4. Update the database:
-   ```bash
-   dotnet ef database update
-   ```
-
-5. Run the application:
-   ```bash
+   dotnet build
    dotnet run --project Pro.Structure.Web
    ```
+4. Access the web interface at `https://localhost:7211`
+5. Access the API at `https://localhost:5281`
 
-## Architecture
+## Development Tools
 
-- **Clean Architecture**: The solution follows clean architecture principles with clear separation of concerns
-- **SOLID Principles**: Implementation adheres to SOLID principles
-- **Repository Pattern**: Generic repository pattern for data access
-- **Factory Pattern**: Used for mapping between entities and DTOs
-- **Service Layer**: Business logic implementation
-- **Entity Framework Core**: Code-first approach with SQLite
-- **MVC Pattern**: Web interface follows MVC architectural pattern
+- Visual Studio 2022 or JetBrains Rider
+- SQLite browser (optional)
+- Postman or similar for API testing
 
-## Database Schema
+## AI Assistance Acknowledgment
 
-- **Projects**: Main project information
-- **Customers**: Customer details
-- **ProjectManagers**: Project manager information
-- **Statuses**: Project status definitions
+This project was developed with assistance from AI tools:
 
-## Web Interface
-
-The web interface provides:
-- Dashboard with project overview
-- CRUD operations for all entities
-- Project status management
-- Project manager assignment
-- Customer management
-- Responsive design for all devices
-
-## API Documentation
-
-The API documentation is available through Swagger UI at `/swagger` when running in development mode.
-
-## Contributing
-
-This is a school project for EC Education. Contributions are welcome for educational purposes.
+- **Claude AI (Anthropic)**: Helped with:
+  - Project structure and architecture decisions
+  - Implementation of Clean Architecture patterns
+  - Creation of views and controllers
+  - Documentation generation
+  - Bug fixing and code optimization
 
 ## License
 
-This project is licensed under the MIT License. 
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details. 

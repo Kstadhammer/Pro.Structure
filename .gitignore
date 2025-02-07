@@ -109,4 +109,41 @@ wwwroot/dist/
 # Temporary files
 *~
 *.swp
+*.swo
+
+# .NET Core build folders
+bin/
+obj/
+
+# Visual Studio / Rider files
+.vs/
+.idea/
+*.user
+*.suo
+*.userprefs
+*.usertasks
+*.sln.docstates
+
+# SQLite database files
+*.db
+*.db-shm
+*.db-wal
+
+# Environment files
+*.env
+appsettings.*.json
+!appsettings.json
+!appsettings.Development.json
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE specific files
+*.swp
 *.swo 

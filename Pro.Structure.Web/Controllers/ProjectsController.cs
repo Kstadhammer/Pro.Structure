@@ -183,29 +183,25 @@ public class ProjectsController : BaseController
     private async Task PopulateDropDownLists()
     {
         var customersResult = await _customerService.GetAllAsync();
-        ViewBag.Customers = customersResult.Success
-            ? customersResult
-                .Data.Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Name })
-                .ToList()
-            : new List<SelectListItem>();
+        ViewBag.Customers = new SelectList(
+            customersResult.Data ?? Enumerable.Empty<CustomerModel>(),
+            "Id",
+            "Name"
+        );
 
         var managersResult = await _projectManagerService.GetAllAsync();
-        ViewBag.ProjectManagers = managersResult.Success
-            ? managersResult
-                .Data.Select(pm => new SelectListItem
-                {
-                    Value = pm.Id.ToString(),
-                    Text = $"{pm.FirstName} {pm.LastName}",
-                })
-                .ToList()
-            : new List<SelectListItem>();
+        ViewBag.ProjectManagers = new SelectList(
+            managersResult.Data ?? Enumerable.Empty<ProjectManagerModel>(),
+            "Id",
+            "FullName"
+        );
 
         var statusesResult = await _statusService.GetAllAsync();
-        ViewBag.Statuses = statusesResult.Success
-            ? statusesResult
-                .Data.Select(s => new SelectListItem { Value = s.Id.ToString(), Text = s.Name })
-                .ToList()
-            : new List<SelectListItem>();
+        ViewBag.Statuses = new SelectList(
+            statusesResult.Data ?? Enumerable.Empty<StatusModel>(),
+            "Id",
+            "Name"
+        );
     }
 
     private static ProjectViewModel MapToViewModel(ProjectModel project)
