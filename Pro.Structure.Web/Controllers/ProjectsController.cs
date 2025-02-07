@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Pro.Structure.Core.Entities;
 using Pro.Structure.Core.Interfaces;
 using Pro.Structure.Core.Models;
@@ -183,18 +184,28 @@ public class ProjectsController : BaseController
     {
         var customersResult = await _customerService.GetAllAsync();
         ViewBag.Customers = customersResult.Success
-            ? customersResult.Data.Select(c => new { c.Id, c.Name }).ToList()
-            : new List<object>();
+            ? customersResult
+                .Data.Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Name })
+                .ToList()
+            : new List<SelectListItem>();
 
         var managersResult = await _projectManagerService.GetAllAsync();
         ViewBag.ProjectManagers = managersResult.Success
-            ? managersResult.Data.Select(pm => new { pm.Id, pm.Name }).ToList()
-            : new List<object>();
+            ? managersResult
+                .Data.Select(pm => new SelectListItem
+                {
+                    Value = pm.Id.ToString(),
+                    Text = $"{pm.FirstName} {pm.LastName}",
+                })
+                .ToList()
+            : new List<SelectListItem>();
 
         var statusesResult = await _statusService.GetAllAsync();
         ViewBag.Statuses = statusesResult.Success
-            ? statusesResult.Data.Select(s => new { s.Id, s.Name }).ToList()
-            : new List<object>();
+            ? statusesResult
+                .Data.Select(s => new SelectListItem { Value = s.Id.ToString(), Text = s.Name })
+                .ToList()
+            : new List<SelectListItem>();
     }
 
     private static ProjectViewModel MapToViewModel(ProjectModel project)

@@ -1,5 +1,7 @@
 html {
   font-size: 14px;
+  position: relative;
+    min-height: 100%;
 }
 
 @media (min-width: 768px) {
@@ -8,24 +10,121 @@ html {
   }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
-}
-
 body {
   margin-bottom: 60px;
+  background-color: #f8f9fa;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+/* Navbar styles */
+.navbar {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .1);
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+.navbar-brand {
+  font-weight: 600;
+}
+
+.nav-link {
+  font-weight: 500;
+}
+
+.nav-link .bi {
+  margin-right: 0.25rem;
+}
+
+/* Card styles */
+.card {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .1);
+  transition: box-shadow 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, .1);
+}
+
+/* Table styles */
+.table th {
+  background-color: #f8f9fa;
+  border-top: none;
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(0, 123, 255, .05);
+}
+
+/* Button styles */
+.btn {
+  font-weight: 500;
+}
+
+.btn .bi {
+  margin-right: 0.25rem;
+}
+
+/* Form styles */
+.form-label {
+  font-weight: 500;
+}
+
+.form-control:focus {
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25);
+}
+
+/* Footer styles */
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background-color: #fff;
+}
+
+/* Custom utility classes */
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.text-truncate-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Status badge styles */
+.status-badge {
+  padding: 0.35em 0.65em;
+  font-size: 0.875em;
+  font-weight: 500;
+  border-radius: 0.25rem;
+}
+
+.status-not-started {
+  background-color: #e2e3e5;
+  color: #383d41;
+}
+
+.status-in-progress {
+  background-color: #cff4fc;
+  color: #055160;
+}
+
+.status-on-hold {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.status-completed {
+  background-color: #d1e7dd;
+  color: #0f5132;
+}
+
+.status-cancelled {
+  background-color: #f8d7da;
+  color: #842029;
+}
+
+/* Loading spinner */
+.loading-spinner {
+  width: 3rem;
+  height: 3rem;
 }
