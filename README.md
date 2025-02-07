@@ -1,6 +1,6 @@
 # Pro.Structure - Project Management System
 
-A project management system built with .NET 9.0, implementing modern development practices and clean architecture principles.
+A comprehensive project management system built with .NET 9.0, implementing modern development practices and clean architecture principles.
 
 ## Features
 
@@ -9,6 +9,7 @@ A project management system built with .NET 9.0, implementing modern development
 - Project manager assignment and tracking
 - Service rate and billing management
 - Status tracking for projects
+- Modern web interface with responsive design
 
 ## Technical Stack
 
@@ -21,10 +22,13 @@ A project management system built with .NET 9.0, implementing modern development
 - Repository Pattern
 - Generic Base Classes
 - Async/Await Implementation
+- ASP.NET Core MVC
+- Bootstrap 5
+- jQuery
 
 ## Project Structure
 
-The solution follows a clean architecture pattern with three main projects:
+The solution follows a clean architecture pattern with four main projects:
 
 - **Pro.Structure.Core**: Contains domain models, interfaces, and business logic definitions
   - Entities
@@ -39,11 +43,18 @@ The solution follows a clean architecture pattern with three main projects:
   - Database context
   - Migrations
 
-- **Pro.Structure.Web** (Coming soon): Will handle the user interface
+- **Pro.Structure.Web.Api**: Provides RESTful API endpoints
+  - Controllers
+  - DTOs
+  - Swagger documentation
+  - CORS configuration
+
+- **Pro.Structure.Web**: Web interface (MVC)
   - Controllers
   - Views
   - ViewModels
   - Frontend assets
+  - User interface
 
 ## Getting Started
 
@@ -51,6 +62,7 @@ The solution follows a clean architecture pattern with three main projects:
 
 - .NET 9.0 SDK
 - Visual Studio 2022 or JetBrains Rider
+- SQLite
 
 ### Setup
 
@@ -76,7 +88,7 @@ The solution follows a clean architecture pattern with three main projects:
 
 5. Run the application:
    ```bash
-   dotnet run
+   dotnet run --project Pro.Structure.Web
    ```
 
 ## Architecture
@@ -87,6 +99,7 @@ The solution follows a clean architecture pattern with three main projects:
 - **Factory Pattern**: Used for mapping between entities and DTOs
 - **Service Layer**: Business logic implementation
 - **Entity Framework Core**: Code-first approach with SQLite
+- **MVC Pattern**: Web interface follows MVC architectural pattern
 
 ## Database Schema
 
@@ -94,6 +107,20 @@ The solution follows a clean architecture pattern with three main projects:
 - **Customers**: Customer details
 - **ProjectManagers**: Project manager information
 - **Statuses**: Project status definitions
+
+## Web Interface
+
+The web interface provides:
+- Dashboard with project overview
+- CRUD operations for all entities
+- Project status management
+- Project manager assignment
+- Customer management
+- Responsive design for all devices
+
+## API Documentation
+
+The API documentation is available through Swagger UI at `/swagger` when running in development mode.
 
 ## Contributing
 

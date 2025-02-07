@@ -17,6 +17,8 @@ nupkg/
 *.user
 *.userosscache
 *.sln.docstates
+*.userprefs
+*.usertasks
 
 # Build results
 [Dd]ebug/
@@ -49,6 +51,8 @@ logs/
 # Environment files
 *.env
 .env.*
+appsettings.Development.json
+appsettings.Production.json
 
 # Test Results
 TestResults/
@@ -57,10 +61,6 @@ TestResults/
 packages/
 *.nupkg
 *.snupkg
-
-# User-specific files
-*.rsuser
-*.userprefs
 
 # Mono Auto Generated Files
 mono_crash.*
@@ -93,4 +93,20 @@ $RECYCLE.BIN/
 *.sln.iml
 
 # ASP.NET Scaffolding
-ScaffoldingReadMe.txt 
+ScaffoldingReadMe.txt
+
+# ASP.NET Core MVC specific
+wwwroot/lib/
+node_modules/
+bower_components/
+*.min.css
+*.min.js
+wwwroot/dist/
+
+# Development settings
+*.Development.json
+
+# Temporary files
+*~
+*.swp
+*.swo 
