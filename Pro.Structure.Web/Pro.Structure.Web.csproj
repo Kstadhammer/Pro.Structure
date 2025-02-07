@@ -6,4 +6,10 @@
         <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
 
+    <ItemGroup>
+        <ProjectReference Include="..\Pro.Structure.Application\Pro.Structure.Application.csproj" />
+        <ProjectReference Include="..\Pro.Structure.Domain\Pro.Structure.Domain.csproj" />
+        <ProjectReference Include="..\Pro.Structure.Infrastructure\Pro.Structure.Infrastructure.csproj" />
+    </ItemGroup>
+
 </Project>
