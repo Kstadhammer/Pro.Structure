@@ -6,9 +6,8 @@ public class ProjectViewModel
 {
     public int Id { get; set; }
 
-    [Required]
     [Display(Name = "Project Number")]
-    public string ProjectNumber { get; set; } = null!;
+    public string? ProjectNumber { get; set; }
 
     [Required]
     [StringLength(100)]
@@ -27,27 +26,35 @@ public class ProjectViewModel
     [Required]
     [Display(Name = "Hourly Rate")]
     [DataType(DataType.Currency)]
+    [Range(0, double.MaxValue, ErrorMessage = "Hourly Rate must be greater than or equal to 0")]
     public decimal HourlyRate { get; set; }
 
     [Required]
     [Display(Name = "Total Price")]
     [DataType(DataType.Currency)]
+    [Range(0, double.MaxValue, ErrorMessage = "Total Price must be greater than or equal to 0")]
     public decimal TotalPrice { get; set; }
 
     [Required]
     [Display(Name = "Project Manager")]
     public int ProjectManagerId { get; set; }
-    public string ProjectManagerName { get; set; } = null!;
+
+    [Display(Name = "Project Manager")]
+    public string? ProjectManagerName { get; set; }
 
     [Required]
     [Display(Name = "Customer")]
     public int CustomerId { get; set; }
-    public string CustomerName { get; set; } = null!;
+
+    [Display(Name = "Customer")]
+    public string? CustomerName { get; set; }
 
     [Required]
     [Display(Name = "Status")]
     public int StatusId { get; set; }
-    public string StatusName { get; set; } = null!;
+
+    [Display(Name = "Status")]
+    public string? StatusName { get; set; }
 
     public DateTime Created { get; set; }
     public DateTime Modified { get; set; }

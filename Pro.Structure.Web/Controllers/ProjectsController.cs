@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Logging;
 using Pro.Structure.Core.Entities;
 using Pro.Structure.Core.Interfaces;
 using Pro.Structure.Core.Models;
@@ -13,18 +14,21 @@ public class ProjectsController : BaseController
     private readonly ICustomerService _customerService;
     private readonly IProjectManagerService _projectManagerService;
     private readonly IStatusService _statusService;
+    private readonly ILogger<ProjectsController> _logger;
 
     public ProjectsController(
         IProjectService projectService,
         ICustomerService customerService,
         IProjectManagerService projectManagerService,
-        IStatusService statusService
+        IStatusService statusService,
+        ILogger<ProjectsController> logger
     )
     {
         _projectService = projectService;
         _customerService = customerService;
         _projectManagerService = projectManagerService;
         _statusService = statusService;
+        _logger = logger;
     }
 
     public async Task<IActionResult> Index()
@@ -82,11 +86,27 @@ public class ProjectsController : BaseController
         {
             if (!ModelState.IsValid)
             {
+                // Log validation errors
+                foreach (var modelStateEntry in ModelState.Values)
+                {
+                    foreach (var error in modelStateEntry.Errors)
+                    {
+                        _logger.LogError("Validation error: {ErrorMessage}", error.ErrorMessage);
+                    }
+                }
+
                 await PopulateDropDownLists();
                 return View(viewModel);
             }
 
+            // Generate project number
+            var projectNumberResult = await _projectService.GenerateProjectNumberAsync();
+            if (!projectNumberResult.Success)
+                return HandleError(new Exception(projectNumberResult.Message));
+
             var project = MapToEntity(viewModel);
+            project.ProjectNumber = projectNumberResult.Data;
+
             var result = await _projectService.AddAsync(project);
             if (!result.Success)
                 return HandleError(new Exception(result.Message));
@@ -231,7 +251,7 @@ public class ProjectsController : BaseController
         return new Project
         {
             Id = viewModel.Id,
-            ProjectNumber = viewModel.ProjectNumber,
+            ProjectNumber = viewModel.ProjectNumber ?? string.Empty,
             Name = viewModel.Name,
             StartDate = viewModel.StartDate,
             EndDate = viewModel.EndDate,
