@@ -54,6 +54,11 @@ A comprehensive project management system built with .NET 9.0, implementing mode
   - Built customer relationship management features
 
 ### AI-Assisted Components (50%)
+- Transaction Management Implementation
+  - Implementation of the Unit of Work pattern
+  - Transaction handling and rollback mechanisms
+  - Integration with Entity Framework Core
+  - Atomic operation handling
 - Frontend Development
   - Implementation of responsive Bootstrap-based UI
   - Dark mode theming and customization
@@ -221,7 +226,37 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgments
 
-- Built with assistance from Claude AI (Anthropic)
+- Built with assistance from Claude AI (Anthropic) for implementing transaction management and other features
+- Guidance and mentoring from Illir on transaction management implementation and best practices
 - Bootstrap and Bootstrap Icons for UI components
 - Entity Framework Core for data access
-- ASP.NET Core team for the framework 
+- ASP.NET Core team for the framework
+
+## Transaction Management
+
+The project implements robust transaction management using the Unit of Work pattern, developed with assistance from AI and guidance from Illir. Key features include:
+
+### Core Components
+- `IUnitOfWork` interface defining transaction operations
+- `UnitOfWork` implementation handling transaction lifecycle
+- Integration with Entity Framework Core's transaction system
+- Automatic rollback on failure
+
+### Key Benefits
+- Ensures data consistency across multiple operations
+- Provides automatic rollback on failures
+- Maintains ACID properties for database operations
+- Simplifies complex transaction management
+
+### Usage Example
+```csharp
+// Example of transaction usage in services
+public async Task<ServiceResponse<T>> Operation()
+{
+    return await _unitOfWork.ExecuteInTransactionAsync(async () =>
+    {
+        // Multiple database operations
+        // All succeed or all fail together
+    });
+}
+``` 

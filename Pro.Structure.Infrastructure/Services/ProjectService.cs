@@ -9,15 +9,86 @@ public class ProjectService : BaseService<Project>, IProjectService
 {
     private readonly IProjectRepository _projectRepository;
     private readonly IFactory<Project, ProjectModel> _projectFactory;
+    private readonly IUnitOfWork _unitOfWork;
 
     public ProjectService(
         IProjectRepository projectRepository,
-        IFactory<Project, ProjectModel> projectFactory
+        IFactory<Project, ProjectModel> projectFactory,
+        IUnitOfWork unitOfWork
     )
         : base(projectRepository)
     {
         _projectRepository = projectRepository;
         _projectFactory = projectFactory;
+        _unitOfWork = unitOfWork;
+    }
+
+    public override async Task<ServiceResponse<Project>> AddAsync(Project entity)
+    {
+        try
+        {
+            return await _unitOfWork.ExecuteInTransactionAsync(async () =>
+            {
+                // Generate project number
+                entity.ProjectNumber = await _projectRepository.GenerateProjectNumberAsync();
+
+                // Add the project
+                var success = await _projectRepository.AddAsync(entity);
+                if (!success)
+                    return ServiceResponse<Project>.Fail("Failed to add project");
+
+                return ServiceResponse<Project>.Ok(entity, "Project added successfully");
+            });
+        }
+        catch (Exception ex)
+        {
+            return ServiceResponse<Project>.Fail($"Error adding project: {ex.Message}");
+        }
+    }
+
+    public override async Task<ServiceResponse<Project>> UpdateAsync(Project entity)
+    {
+        try
+        {
+            return await _unitOfWork.ExecuteInTransactionAsync(async () =>
+            {
+                var existingProject = await _projectRepository.GetByIdAsync(entity.Id);
+                if (existingProject == null)
+                    return ServiceResponse<Project>.Fail("Project not found");
+
+                // Preserve the original project number
+                entity.ProjectNumber = existingProject.ProjectNumber;
+
+                var success = await _projectRepository.UpdateAsync(entity);
+                if (!success)
+                    return ServiceResponse<Project>.Fail("Failed to update project");
+
+                return ServiceResponse<Project>.Ok(entity, "Project updated successfully");
+            });
+        }
+        catch (Exception ex)
+        {
+            return ServiceResponse<Project>.Fail($"Error updating project: {ex.Message}");
+        }
+    }
+
+    public override async Task<ServiceResponse<bool>> DeleteAsync(int id)
+    {
+        try
+        {
+            return await _unitOfWork.ExecuteInTransactionAsync(async () =>
+            {
+                var success = await _projectRepository.DeleteAsync(id);
+                if (!success)
+                    return ServiceResponse<bool>.Fail("Failed to delete project");
+
+                return ServiceResponse<bool>.Ok(true, "Project deleted successfully");
+            });
+        }
+        catch (Exception ex)
+        {
+            return ServiceResponse<bool>.Fail($"Error deleting project: {ex.Message}");
+        }
     }
 
     public async Task<ServiceResponse<string>> GenerateProjectNumberAsync()

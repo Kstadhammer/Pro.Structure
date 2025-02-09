@@ -11,12 +11,14 @@ public class CustomerService : BaseService<Customer>, ICustomerService
     private readonly IProjectRepository _projectRepository;
     private readonly IFactory<Customer, CustomerModel> _customerFactory;
     private readonly IFactory<Project, ProjectModel> _projectFactory;
+    private readonly IUnitOfWork _unitOfWork;
 
     public CustomerService(
         ICustomerRepository customerRepository,
         IProjectRepository projectRepository,
         IFactory<Customer, CustomerModel> customerFactory,
-        IFactory<Project, ProjectModel> projectFactory
+        IFactory<Project, ProjectModel> projectFactory,
+        IUnitOfWork unitOfWork
     )
         : base(customerRepository)
     {
@@ -24,6 +26,94 @@ public class CustomerService : BaseService<Customer>, ICustomerService
         _projectRepository = projectRepository;
         _customerFactory = customerFactory;
         _projectFactory = projectFactory;
+        _unitOfWork = unitOfWork;
+    }
+
+    public override async Task<ServiceResponse<Customer>> AddAsync(Customer entity)
+    {
+        try
+        {
+            return await _unitOfWork.ExecuteInTransactionAsync(async () =>
+            {
+                // Check if customer with same email exists
+                if (await _customerRepository.ExistsByEmailAsync(entity.Email))
+                    return ServiceResponse<Customer>.Fail(
+                        "Customer with this email already exists"
+                    );
+
+                var success = await _customerRepository.AddAsync(entity);
+                if (!success)
+                    return ServiceResponse<Customer>.Fail("Failed to add customer");
+
+                return ServiceResponse<Customer>.Ok(entity, "Customer added successfully");
+            });
+        }
+        catch (Exception ex)
+        {
+            return ServiceResponse<Customer>.Fail($"Error adding customer: {ex.Message}");
+        }
+    }
+
+    public override async Task<ServiceResponse<Customer>> UpdateAsync(Customer entity)
+    {
+        try
+        {
+            return await _unitOfWork.ExecuteInTransactionAsync(async () =>
+            {
+                var existingCustomer = await _customerRepository.GetByIdAsync(entity.Id);
+                if (existingCustomer == null)
+                    return ServiceResponse<Customer>.Fail("Customer not found");
+
+                // Check if email is being changed and if new email already exists
+                if (
+                    existingCustomer.Email != entity.Email
+                    && await _customerRepository.ExistsByEmailAsync(entity.Email)
+                )
+                {
+                    return ServiceResponse<Customer>.Fail(
+                        "Customer with this email already exists"
+                    );
+                }
+
+                var success = await _customerRepository.UpdateAsync(entity);
+                if (!success)
+                    return ServiceResponse<Customer>.Fail("Failed to update customer");
+
+                return ServiceResponse<Customer>.Ok(entity, "Customer updated successfully");
+            });
+        }
+        catch (Exception ex)
+        {
+            return ServiceResponse<Customer>.Fail($"Error updating customer: {ex.Message}");
+        }
+    }
+
+    public override async Task<ServiceResponse<bool>> DeleteAsync(int id)
+    {
+        try
+        {
+            return await _unitOfWork.ExecuteInTransactionAsync(async () =>
+            {
+                // Check if customer has any projects
+                var customerProjects = await _projectRepository.GetProjectsByCustomerAsync(id);
+                if (customerProjects.Any())
+                {
+                    return ServiceResponse<bool>.Fail(
+                        "Cannot delete customer with active projects"
+                    );
+                }
+
+                var success = await _customerRepository.DeleteAsync(id);
+                if (!success)
+                    return ServiceResponse<bool>.Fail("Failed to delete customer");
+
+                return ServiceResponse<bool>.Ok(true, "Customer deleted successfully");
+            });
+        }
+        catch (Exception ex)
+        {
+            return ServiceResponse<bool>.Fail($"Error deleting customer: {ex.Message}");
+        }
     }
 
     public async Task<ServiceResponse<CustomerModel>> GetByEmailAsync(string email)
@@ -106,24 +196,6 @@ public class CustomerService : BaseService<Customer>, ICustomerService
         catch (Exception ex)
         {
             return ServiceResponse<CustomerModel>.Fail($"Error mapping customer: {ex.Message}");
-        }
-    }
-
-    public override async Task<ServiceResponse<bool>> DeleteAsync(int id)
-    {
-        try
-        {
-            var customerProjects = await _projectRepository.GetProjectsByCustomerAsync(id);
-            if (customerProjects.Any())
-            {
-                return ServiceResponse<bool>.Fail("Cannot delete customer with active projects");
-            }
-
-            return await base.DeleteAsync(id);
-        }
-        catch (Exception ex)
-        {
-            return ServiceResponse<bool>.Fail($"Error deleting customer: {ex.Message}");
         }
     }
 }

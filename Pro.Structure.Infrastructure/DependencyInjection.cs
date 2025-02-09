@@ -27,6 +27,9 @@ public static class DependencyInjection
             )
         );
 
+        // Add UnitOfWork
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+
         // Get the service provider
         var serviceProvider = services.BuildServiceProvider();
 
