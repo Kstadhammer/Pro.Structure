@@ -1,13 +1,15 @@
 using Pro.Structure.Infrastructure;
 
+// Create the API application builder
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Register infrastructure services
 await builder.Services.AddInfrastructureAsync(builder.Configuration);
 
+// Add API controllers
 builder.Services.AddControllers();
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// Configure Swagger/OpenAPI documentation
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -15,7 +17,7 @@ builder.Services.AddSwaggerGen(c =>
     c.EnableAnnotations();
 });
 
-// Configure CORS
+// Configure CORS for cross-origin requests
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(
@@ -24,23 +26,26 @@ builder.Services.AddCors(options =>
     );
 });
 
+// Build the application
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
+    // Enable Swagger UI in development
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// Configure middleware pipeline
+app.UseHttpsRedirection(); // Redirect HTTP to HTTPS
+app.UseCors("AllowAll"); // Enable CORS
+app.UseAuthorization(); // Enable authorization
 
-app.UseCors("AllowAll");
-
-app.UseAuthorization();
-
+// Map API controllers
 app.MapControllers();
 
+// Start the application
 app.Run();
 
 record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)

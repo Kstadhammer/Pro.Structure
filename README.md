@@ -1,262 +1,343 @@
-# Mattin-Lassei Group AB - Project Management System
+# Project Management System
 
-A comprehensive project management system built with .NET 9.0, implementing modern development practices, clean architecture principles, and a responsive dark mode UI.
+A simple and modern project management system built for Mattin-Lassei Group AB. The system helps manage projects, customers, and project managers with an easy-to-use interface.
 
-## Assignment Requirements
+## What Can This System Do?
 
-### Required Features (G)
-- [x] Frontend Application
-  - [x] Project listing page
-  - [x] Project creation page
-  - [x] Project edit/update page
+### For Projects
+- Create and manage projects
+- Automatically generate project numbers (format: P-101, P-102, etc.)
+- Track project status (not started, in progress, completed, etc.)
+- Monitor project costs and billing rates (per hour/project)
+- Assign project managers (with workload balancing)
+- Track project timelines and deadlines
+- Generate project reports
+- Manage project budgets and cost tracking
 
-- [x] Class Library Implementation
-  - [x] Entity Framework Core - Code First
-  - [x] SQLite database implementation
-  - [x] Multiple entities/tables (Projects, Customers, etc.)
-  - [x] Service layer implementation
-  - [x] Repository pattern implementation
-  - [x] Dependency Injection
-  - [x] Single Responsibility Principle (SRP)
+### For Customers
+- Store customer information (name, email, phone)
+- Track customer projects (current and historical)
+- Manage customer contacts and communication
+- View project history and timeline
+- Monitor project costs and budgets
+- Access real-time project status updates
+- Store billing information and rates
 
-### Advanced Features (VG)
-- [x] Generic Base Repository
-- [x] Extended Entity Model
-  - [x] Customer entity
-  - [x] Project Manager entity
-  - [x] Status entity
-  - [x] Project entity with relationships
-- [x] Comprehensive Service Layer
-  - [x] CRUD operations for all entities
-  - [x] Business logic implementation
-- [x] SOLID Principles Implementation
-- [x] Factory Pattern Implementation
-- [x] Asynchronous Operations
-- [x] Transaction Management
+### For Project Managers
+- Track workload (max 5 active projects)
+- Manage multiple projects efficiently
+- Keep contact information up to date
+- Monitor team capacity and availability
+- View project deadlines and milestones
+- Handle project assignments and transfers
+- Track project progress and status updates
 
-## Implementation Details
+## System Architecture
 
-### Personal Contributions (50%)
-- Backend Architecture & Design
-  - Designed and implemented the core domain entities and interfaces
-  - Created the repository pattern implementation
-  - Developed the service layer with business logic
-  - Set up Entity Framework Core with SQLite integration
-  - Implemented dependency injection and service registration
-- Database Design & Management
-  - Designed the database schema and relationships
-  - Created migrations and seeding functionality
-  - Implemented data access patterns and optimizations
-- Business Logic Implementation
-  - Developed core business rules and validations
-  - Implemented project status workflow logic
-  - Created project manager availability tracking
-  - Built customer relationship management features
+### Main Components
+1. **Website (MVC Application)**
+   - Built with ASP.NET Core MVC
+   - Responsive Bootstrap 5.3.3 UI
+   - Dark/light mode using CSS variables
+   - Client-side validation with jQuery
+   - Real-time updates using AJAX
 
-### AI-Assisted Components (50%)
-- Transaction Management Implementation
-  - Implementation of the Unit of Work pattern
-  - Transaction handling and rollback mechanisms
-  - Integration with Entity Framework Core
-  - Atomic operation handling
-- Frontend Development
-  - Implementation of responsive Bootstrap-based UI
-  - Dark mode theming and customization
-  - Status badge styling and visual components
-  - Form validation and user input handling
-- Documentation & Code Organization
-  - README.md documentation and structure
-  - Code comments and documentation
-  - Project structure organization
-  - API documentation with Swagger
-- UI/UX Enhancements
-  - Responsive design implementation
-  - Dark/light mode toggle functionality
-  - Interactive status badges and indicators
-  - Form validation feedback
-- Code Quality & Optimization
-  - Code refactoring suggestions
-  - Performance optimization recommendations
-  - Best practices implementation
-  - Error handling improvements
-- Testing & Debugging
-  - Bug identification and fixes
-  - Testing strategy suggestions
-  - Error handling patterns
-  - Edge case handling
+2. **API (RESTful Service)**
+   - ASP.NET Core Web API
+   - Swagger/OpenAPI documentation
+   - CORS enabled for cross-origin requests
+   - JWT authentication ready
+   - Rate limiting and caching support
 
-## Features
+3. **Database (SQLite)**
+   - Entity Framework Core with Code First
+   - Automatic migrations
+   - Data seeding for initial setup
+   - Transaction management
+   - Relationship handling
 
-### Core Functionality
-- Project lifecycle management with automated project number generation
-- Customer relationship management
-- Project manager workload tracking and assignment
-- Dynamic status tracking for projects
-- Service rate and billing management
+4. **Business Logic Layer**
+   - Service-based architecture
+   - Repository pattern implementation
+   - Factory pattern for object creation
+   - Unit of Work for transactions
+   - SOLID principles application
 
-### Technical Features
-- Clean Architecture with domain-driven design
-- Modern web interface with responsive design
-- Dark/Light mode theme support
-- RESTful API with Swagger documentation
-- Factory pattern implementation
-- Service response pattern for robust error handling
+### Technical Implementation
 
-## Project Structure
+#### Database Schema
+```
+Projects
+- Id (int, primary key)
+- ProjectNumber (string, unique)
+- Name (string, max 100)
+- StartDate (DateTime)
+- EndDate (DateTime)
+- Rate (decimal)
+- TotalPrice (decimal)
+- CustomerId (int, foreign key)
+- ProjectManagerId (int, foreign key)
+- StatusId (int, foreign key)
 
-The solution follows Clean Architecture principles and is organized into the following projects:
+Customers
+- Id (int, primary key)
+- Name (string, max 100)
+- Email (string, unique)
+- PhoneNumber (string)
 
-### Pro.Structure.Core
-Core domain layer containing business entities, interfaces, and models. See [Core README](Pro.Structure.Core/README.md) for details.
-- Business entities and validation
-- Interface definitions
-- Domain models and DTOs
-- Factory interfaces
+ProjectManagers
+- Id (int, primary key)
+- FirstName (string)
+- LastName (string)
+- Email (string, unique)
+- PhoneNumber (string)
 
-### Pro.Structure.Infrastructure
-Implementation of data access and business logic. See [Infrastructure README](Pro.Structure.Infrastructure/README.md) for details.
-- Entity Framework Core implementation
-- Repository implementations
-- Service implementations
-- Factory implementations
-- Database migrations and seeding
+Statuses
+- Id (int, primary key)
+- Name (string, max 50)
+- Description (string)
+```
 
-### Pro.Structure.Web
-Main web interface with MVC pattern. See [Web README](Pro.Structure.Web/README.md) for details.
-- Responsive Bootstrap 5.3.3 UI
-- Dark/Light mode support
-- CRUD operations
-- Form validation
-- Status tracking
+#### Key Features Implementation
 
-### Pro.Structure.Web.Api
-RESTful API interface. See [Web.Api README](Pro.Structure.Web.Api/README.md) for details.
-- RESTful endpoints
-- Swagger/OpenAPI documentation
-- CORS configuration
-- API versioning
+1. **Transaction Management**
+   ```csharp
+   public async Task<ServiceResponse<T>> Operation()
+   {
+       return await _unitOfWork.ExecuteInTransactionAsync(async () =>
+       {
+           // Multiple database operations
+           // All succeed or all fail together
+       });
+   }
+   ```
 
-## Technical Stack
+2. **Project Number Generation**
+   ```csharp
+   public async Task<string> GenerateProjectNumberAsync()
+   {
+       var lastProject = await _dbSet
+           .OrderByDescending(p => p.ProjectNumber)
+           .FirstOrDefaultAsync();
 
-### Backend
-- .NET 9.0
-- Entity Framework Core with SQLite
-- ASP.NET Core MVC & Web API
-- Clean Architecture
-- SOLID Principles
-- Factory Pattern
-- Service Response Pattern
+       if (lastProject == null)
+           return "P-101";
 
-### Frontend
-- Bootstrap 5.3.3
-- Bootstrap Icons
-- Modern responsive design
-- Dark/Light mode theming
-- jQuery validation
+       var currentNumber = int.Parse(lastProject.ProjectNumber.Split('-')[1]);
+       return $"P-{currentNumber + 1}";
+   }
+   ```
+
+3. **Workload Management**
+   ```csharp
+   public async Task<bool> CanAssignProjectAsync(int projectManagerId)
+   {
+       var activeProjects = await GetActiveProjectsCount(projectManagerId);
+       return activeProjects < 5;
+   }
+   ```
+
+## Development Contributions
+
+### AI-Assisted Features (50%)
+1. **Transaction Management**
+   - Implementation of Unit of Work pattern
+   - Transaction handling and rollback
+   - Data consistency protection
+   - Error recovery mechanisms
+
+2. **User Interface**
+   - Responsive design implementation
+   - Dark/light mode theming
+   - Form validations
+   - Status indicators
+   - Interactive components
+
+3. **Code Architecture**
+   - Repository pattern setup
+   - Service layer implementation
+   - Factory pattern integration
+   - Dependency injection configuration
+
+4. **Documentation**
+   - API documentation with Swagger
+   - Code comments and explanations
+   - README file structure
+   - Setup instructions
+
+5. **Database Design**
+   - Entity relationships
+   - Data migrations
+   - Seeding functionality
+   - Query optimization
+
+### Personal Implementation (50%)
+1. **Core Business Logic**
+   - Project management rules
+   - Customer relationship handling
+   - Project manager workload balancing
+   - Status workflow management
+
+2. **Database Management**
+   - Data structure design
+   - Table relationships
+   - Data access patterns
+   - Performance optimization
+
+3. **Security Features**
+   - Input validation
+   - Data protection
+   - Error handling
+   - Safe data operations
 
 ## Getting Started
 
-1. Clone the repository
-   ```bash
-   git clone https://github.com/Kstadhammer/Pro.Structure.git
-   ```
-
-2. Ensure .NET 9.0 SDK is installed
-
-3. Run the following commands in the solution directory:
-   ```bash
-   dotnet restore
-   dotnet build
-   dotnet run --project Pro.Structure.Web
-   ```
-
-4. Access the applications:
-   - Web Interface: `https://localhost:7211`
-   - API: `https://localhost:5281`
-   - Swagger Documentation: `https://localhost:5281/swagger`
-
-## Development Setup
-
-### Required Tools
+### Prerequisites
 - Visual Studio 2022 or JetBrains Rider
 - .NET 9.0 SDK
-- SQLite browser (optional)
-- Git
+- Git for version control
+- SQLite browser (optional but helpful)
+- Node.js (for frontend development)
+- Web browser (Chrome/Firefox/Edge latest version)
 
-### Database Setup
-The application uses SQLite with automatic migrations:
-1. Database will be created automatically on first run
-2. Initial seed data will be populated
-3. Migrations are applied automatically
+### Development Environment Setup
+1. Install .NET 9.0 SDK
+2. Install your preferred IDE
+3. Install SQLite browser
+4. Clone the repository
+5. Set up user secrets (if needed)
+6. Run database migrations
 
-## Features in Detail
+### Configuration Settings
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Data Source=ProStructure.db"
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  }
+}
+```
 
-### Project Management
-- Automated project number generation
-- Status tracking with customizable statuses
-- Financial tracking (hourly rates, total price)
-- Project manager assignment with workload balancing
+## Project Organization
 
-### Customer Management
-- Customer profile management
-- Project association tracking
-- Contact information management
+### Core (Pro.Structure.Core)
+- Basic building blocks
+- Business rules
+- Interfaces
+- Data models
+- Validation logic
 
-### Project Manager Features
-- Workload tracking
-- Project assignment limits
-- Contact information management
+### Infrastructure (Pro.Structure.Infrastructure)
+- Database operations
+- Business logic
+- Data access
+- Transaction management
+- Repository implementations
 
-### Status Management
-- Dynamic status creation
-- Project status tracking
-- Status-based filtering
+### Website (Pro.Structure.Web)
+- User interface
+- Forms and pages
+- Dark/light mode
+- Client-side validation
+- Interactive features
 
-## Contributing
+### API (Pro.Structure.Web.Api)
+- API endpoints
+- Documentation
+- External system connections
+- CORS configuration
+- Swagger integration
 
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
+## Special Features
+
+### Data Safety
+- All changes are wrapped in transactions
+- Automatic rollback if something goes wrong
+- Data consistency protection
+- Safe multi-step operations
+- Error logging and tracking
+- Data validation at multiple levels
+
+### Smart Design
+- Clean and organized code
+- Easy to maintain and update
+- Follows best practices
+- Built for performance
+- Modular architecture
+- Extensible design
+
+### User Experience
+- Responsive layout for all devices
+- Intuitive navigation
+- Dark/light mode support
+- Fast loading times
+- Interactive feedback
+- Form validation
+- Error messages
+- Success notifications
+
+### Database Features
+- Automatic migrations
+- Data seeding
+- Relationship management
+- Transaction support
+- Query optimization
+- Data consistency rules
+- Backup support
+
+## Help and Credits
+
+This project was built with significant help from:
+
+### AI Assistance (Claude)
+- Implemented transaction management system
+- Designed database structure
+- Created repository patterns
+- Set up dependency injection
+- Generated API documentation
+- Implemented form validation
+- Created error handling
+- Designed user interface components
+- Wrote code comments and documentation
+- Suggested performance optimizations
+
+### Professional Guidance (Illir)
+- Transaction management best practices
+- Database design review
+- Architecture recommendations
+- Code quality improvements
+- Performance optimization tips
+- Security considerations
+
+### Technologies Used
+- Bootstrap - For responsive UI
+- Entity Framework Core - Database operations
+- ASP.NET Core - Web framework
+- SQLite - Database engine
+- Swagger - API documentation
+- Git - Version control
+
+## Want to Help?
+
+1. Fork the project
+2. Create your feature branch
+3. Make your changes
+4. Test everything works
+5. Create a pull request
+
+### Areas for Contribution
+- New features
+- Bug fixes
+- Documentation improvements
+- Performance optimizations
+- Test coverage
+- UI/UX enhancements
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-
-- Built with assistance from Claude AI (Anthropic) for implementing transaction management and other features
-- Guidance and mentoring from Illir on transaction management implementation and best practices
-- Bootstrap and Bootstrap Icons for UI components
-- Entity Framework Core for data access
-- ASP.NET Core team for the framework
-
-## Transaction Management
-
-The project implements robust transaction management using the Unit of Work pattern, developed with assistance from AI and guidance from Illir. Key features include:
-
-### Core Components
-- `IUnitOfWork` interface defining transaction operations
-- `UnitOfWork` implementation handling transaction lifecycle
-- Integration with Entity Framework Core's transaction system
-- Automatic rollback on failure
-
-### Key Benefits
-- Ensures data consistency across multiple operations
-- Provides automatic rollback on failures
-- Maintains ACID properties for database operations
-- Simplifies complex transaction management
-
-### Usage Example
-```csharp
-// Example of transaction usage in services
-public async Task<ServiceResponse<T>> Operation()
-{
-    return await _unitOfWork.ExecuteInTransactionAsync(async () =>
-    {
-        // Multiple database operations
-        // All succeed or all fail together
-    });
-}
-``` 
+This project uses the MIT License - see [LICENSE](LICENSE) for details. 

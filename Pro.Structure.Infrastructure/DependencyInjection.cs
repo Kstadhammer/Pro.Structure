@@ -12,6 +12,10 @@ using Pro.Structure.Infrastructure.Services;
 
 namespace Pro.Structure.Infrastructure;
 
+/// <summary>
+/// Configures dependency injection for the application.
+/// Sets up database, repositories, services, and factories.
+/// </summary>
 public static class DependencyInjection
 {
     public static async Task<IServiceCollection> AddInfrastructureAsync(
@@ -19,7 +23,7 @@ public static class DependencyInjection
         IConfiguration configuration
     )
     {
-        // Database
+        // Configure SQLite database with migrations support
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlite(
                 configuration.GetConnectionString("DefaultConnection"),
@@ -27,32 +31,28 @@ public static class DependencyInjection
             )
         );
 
-        // Add UnitOfWork
+        // Add transaction management support
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-        // Get the service provider
+        // Initialize database and apply migrations
         var serviceProvider = services.BuildServiceProvider();
-
-        // Get the DbContext instance
         using var scope = serviceProvider.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
-        // Apply migrations and seed data
         await ApplicationDbContextSeed.SeedAsync(context);
 
-        // Repositories
+        // Register repositories - each handles database operations for a specific entity
         services.AddScoped<IProjectRepository, ProjectRepository>();
         services.AddScoped<ICustomerRepository, CustomerRepository>();
         services.AddScoped<IStatusRepository, StatusRepository>();
         services.AddScoped<IProjectManagerRepository, ProjectManagerRepository>();
 
-        // Factories
+        // Register factories - handle conversion between entities and models
         services.AddScoped<IFactory<Project, ProjectModel>, ProjectFactory>();
         services.AddScoped<IFactory<Customer, CustomerModel>, CustomerFactory>();
         services.AddScoped<IFactory<Status, StatusModel>, StatusFactory>();
         services.AddScoped<IFactory<ProjectManager, ProjectManagerModel>, ProjectManagerFactory>();
 
-        // Services
+        // Register services - implement business logic and orchestrate operations
         services.AddScoped<IProjectService, ProjectService>();
         services.AddScoped<ICustomerService, CustomerService>();
         services.AddScoped<IStatusService, StatusService>();
