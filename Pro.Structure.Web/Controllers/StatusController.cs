@@ -26,6 +26,17 @@ public class StatusController : BaseController
                 return HandleError(new Exception(result.Message));
 
             var viewModels = result.Data.Select(s => MapToViewModel(s)).ToList();
+
+            // Fetch project counts for each status
+            foreach (var viewModel in viewModels)
+            {
+                var projectsResult = await _projectService.GetProjectsByStatusAsync(viewModel.Id);
+                if (projectsResult.Success)
+                {
+                    viewModel.ProjectCount = projectsResult.Data.Count();
+                }
+            }
+
             return View(viewModels);
         }
         catch (Exception ex)
@@ -71,6 +82,9 @@ public class StatusController : BaseController
                 return View(viewModel);
 
             var status = MapToEntity(viewModel);
+            status.Created = DateTime.Now;
+            status.Modified = DateTime.Now;
+
             var result = await _statusService.AddAsync(status);
             if (!result.Success)
                 return HandleError(new Exception(result.Message));

@@ -26,6 +26,17 @@ public class CustomersController : BaseController
                 return HandleError(new Exception(result.Message));
 
             var viewModels = result.Data.Select(c => MapToViewModel(c)).ToList();
+
+            // Fetch project counts for each customer
+            foreach (var viewModel in viewModels)
+            {
+                var projectsResult = await _projectService.GetProjectsByCustomerAsync(viewModel.Id);
+                if (projectsResult.Success)
+                {
+                    viewModel.ProjectCount = projectsResult.Data.Count();
+                }
+            }
+
             return View(viewModels);
         }
         catch (Exception ex)
@@ -71,6 +82,9 @@ public class CustomersController : BaseController
                 return View(viewModel);
 
             var customer = MapToEntity(viewModel);
+            customer.Created = DateTime.Now;
+            customer.Modified = DateTime.Now;
+
             var result = await _customerService.AddAsync(customer);
             if (!result.Success)
                 return HandleError(new Exception(result.Message));
