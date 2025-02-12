@@ -1,0 +1,35 @@
+@{
+    var controller = ViewContext.RouteData.Values["controller"]?.ToString();
+    var action = ViewContext.RouteData.Values["action"]?.ToString();
+    var id = ViewContext.RouteData.Values["id"]?.ToString();
+}
+
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+        @if (User.Identity?.IsAuthenticated ?? false)
+        {
+            <li class="breadcrumb-item">
+                <a asp-controller="Projects" asp-action="Index">
+                    <i class="bi bi-house"></i> Home
+                </a>
+            </li>
+
+            @if (controller != "Projects" || action != "Index")
+            {
+                <li class="breadcrumb-item">
+                    <a asp-controller="@controller" asp-action="Index">@controller</a>
+                </li>
+
+                @if (action != "Index")
+                {
+                    <li class="breadcrumb-item active" aria-current="page">@action</li>
+                }
+
+                @if (!string.IsNullOrEmpty(id))
+                {
+                    <li class="breadcrumb-item active" aria-current="page">#@id</li>
+                }
+            }
+        }
+    </ol>
+</nav>

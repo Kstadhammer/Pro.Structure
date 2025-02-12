@@ -17,6 +17,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Customer> Customers { get; set; } = null!;
     public DbSet<Status> Statuses { get; set; } = null!;
     public DbSet<ProjectManager> ProjectManagers { get; set; } = null!;
+    public DbSet<User> Users { get; set; } = null!;
 
     /// <summary>
     /// Configures the database model and relationships between entities.
@@ -39,5 +40,12 @@ public class ApplicationDbContext : DbContext
 
         // ProjectManager configurations - Email is required for notifications
         modelBuilder.Entity<ProjectManager>().Property(pm => pm.Email).IsRequired();
+
+        // User configurations
+        modelBuilder.Entity<User>().Property(u => u.Email).IsRequired();
+        modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
+        modelBuilder.Entity<User>().Property(u => u.Username).IsRequired();
+        modelBuilder.Entity<User>().HasIndex(u => u.Username).IsUnique();
+        modelBuilder.Entity<User>().Property(u => u.PasswordHash).IsRequired();
     }
 }

@@ -1,0 +1,111 @@
+@model ProfileViewModel
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title mb-4">Profile Settings</h2>
+
+                <form asp-action="Profile" method="post">
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="Created" />
+                    <input type="hidden" asp-for="LastLogin" />
+                    <input type="hidden" asp-for="Role" />
+
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6 class="card-subtitle mb-2 text-muted">Account Information</h6>
+                                    <dl class="row mb-0">
+                                        <dt class="col-sm-4">Email</dt>
+                                        <dd class="col-sm-8">@Model.Email</dd>
+
+                                        <dt class="col-sm-4">Username</dt>
+                                        <dd class="col-sm-8">@Model.Username</dd>
+
+                                        <dt class="col-sm-4">Role</dt>
+                                        <dd class="col-sm-8">@Model.Role</dd>
+
+                                        <dt class="col-sm-4">Member Since</dt>
+                                        <dd class="col-sm-8">@Model.Created.ToString("MMM dd, yyyy")</dd>
+
+                                        @if (Model.LastLogin.HasValue)
+                                        {
+                                            <dt class="col-sm-4">Last Login</dt>
+                                            <dd class="col-sm-8">@Model.LastLogin.Value.ToString("MMM dd, yyyy HH:mm")</dd>
+                                        }
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4 class="mb-3">Personal Information</h4>
+
+                            <div class="mb-3">
+                                <label asp-for="FirstName" class="form-label"></label>
+                                <input asp-for="FirstName" class="form-control" />
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="LastName" class="form-label"></label>
+                                <input asp-for="LastName" class="form-control" />
+                                <span asp-validation-for="LastName" class="text-danger"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="PhoneNumber" class="form-label"></label>
+                                <input asp-for="PhoneNumber" class="form-control" />
+                                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <h4 class="mb-3">Change Password</h4>
+                            <p class="text-muted small">Leave blank to keep your current password</p>
+
+                            <div class="mb-3">
+                                <label asp-for="CurrentPassword" class="form-label"></label>
+                                <input asp-for="CurrentPassword" class="form-control" />
+                                <span asp-validation-for="CurrentPassword" class="text-danger"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="NewPassword" class="form-label"></label>
+                                <input asp-for="NewPassword" class="form-control" />
+                                <span asp-validation-for="NewPassword" class="text-danger"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="ConfirmNewPassword" class="form-label"></label>
+                                <input asp-for="ConfirmNewPassword" class="form-control" />
+                                <span asp-validation-for="ConfirmNewPassword" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save"></i> Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -47,6 +47,31 @@ public static class ApplicationDbContextSeed
             {
                 logger.LogInformation("Project managers already exist in database");
             }
+
+            // Seed Admin User
+            if (!await context.Users.AnyAsync())
+            {
+                logger.LogInformation("Seeding admin user...");
+                var adminUser = new User
+                {
+                    Email = "admin@prostructure.com",
+                    Username = "admin",
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin123!"),
+                    FirstName = "Admin",
+                    LastName = "User",
+                    Role = "Admin",
+                    IsActive = true,
+                    Created = DateTime.UtcNow,
+                    Modified = DateTime.UtcNow,
+                };
+                await context.Users.AddAsync(adminUser);
+                await context.SaveChangesAsync();
+                logger.LogInformation("Successfully seeded admin user");
+            }
+            else
+            {
+                logger.LogInformation("Users already exist in database");
+            }
         }
         catch (Exception ex)
         {

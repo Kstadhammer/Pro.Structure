@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
@@ -8,6 +9,7 @@ using Pro.Structure.Web.ViewModels;
 
 namespace Pro.Structure.Web.Controllers;
 
+[Authorize]
 public class ProjectsController : BaseController
 {
     private readonly IProjectService _projectService;
