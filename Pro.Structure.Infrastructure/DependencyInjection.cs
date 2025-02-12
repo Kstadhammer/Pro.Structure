@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Pro.Structure.Core.Entities;
 using Pro.Structure.Core.Factories;
 using Pro.Structure.Core.Interfaces;
@@ -38,7 +39,8 @@ public static class DependencyInjection
         var serviceProvider = services.BuildServiceProvider();
         using var scope = serviceProvider.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        await ApplicationDbContextSeed.SeedAsync(context);
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<ApplicationDbContext>>();
+        await ApplicationDbContextSeed.SeedAsync(context, logger);
 
         // Register repositories - each handles database operations for a specific entity
         services.AddScoped<IProjectRepository, ProjectRepository>();

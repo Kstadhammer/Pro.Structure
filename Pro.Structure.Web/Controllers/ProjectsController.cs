@@ -123,16 +123,21 @@ public class ProjectsController : BaseController
     {
         try
         {
+            // First get the project
             var result = await _projectService.GetByIdAsync(id);
             if (!result.Success)
                 return HandleNotFound(result.Message);
 
+            // Then populate all dropdown lists
             await PopulateDropDownLists();
+
+            // Finally, map to view model and return the view
             var viewModel = MapToViewModel(result.Data);
             return View(viewModel);
         }
         catch (Exception ex)
         {
+            _logger.LogError(ex, "Error in Edit action for project {ProjectId}", id);
             return HandleError(ex);
         }
     }
@@ -148,6 +153,7 @@ public class ProjectsController : BaseController
 
             if (!ModelState.IsValid)
             {
+                // Repopulate dropdown lists if validation fails
                 await PopulateDropDownLists();
                 return View(viewModel);
             }
@@ -161,6 +167,8 @@ public class ProjectsController : BaseController
         }
         catch (Exception ex)
         {
+            _logger.LogError(ex, "Error in Edit POST action for project {ProjectId}", id);
+            await PopulateDropDownLists(); // Repopulate lists if there's an error
             return HandleError(ex);
         }
     }
@@ -202,26 +210,56 @@ public class ProjectsController : BaseController
 
     private async Task PopulateDropDownLists()
     {
-        var customersResult = await _customerService.GetAllAsync();
-        ViewBag.Customers = new SelectList(
-            customersResult.Data ?? Enumerable.Empty<CustomerModel>(),
-            "Id",
-            "Name"
-        );
+        try
+        {
+            // Get statuses first since they're required
+            var statusesResult = await _statusService.GetAllAsync();
+            var statusList =
+                statusesResult.Success && statusesResult.Data != null
+                    ? statusesResult.Data.ToList()
+                    : new List<StatusModel>();
 
-        var managersResult = await _projectManagerService.GetAllAsync();
-        ViewBag.ProjectManagers = new SelectList(
-            managersResult.Data ?? Enumerable.Empty<ProjectManagerModel>(),
-            "Id",
-            "FullName"
-        );
+            ViewBag.Statuses = statusList;
 
-        var statusesResult = await _statusService.GetAllAsync();
-        ViewBag.Statuses = new SelectList(
-            statusesResult.Data ?? Enumerable.Empty<StatusModel>(),
-            "Id",
-            "Name"
-        );
+            // Get customers
+            var customersResult = await _customerService.GetAllAsync();
+            var customerList =
+                customersResult.Success && customersResult.Data != null
+                    ? customersResult.Data.ToList()
+                    : new List<CustomerModel>();
+
+            ViewBag.Customers = customerList;
+
+            // Get project managers
+            var managersResult = await _projectManagerService.GetAllAsync();
+            var managerList =
+                managersResult.Success && managersResult.Data != null
+                    ? managersResult.Data.ToList()
+                    : new List<ProjectManagerModel>();
+
+            ViewBag.ProjectManagers = managerList;
+
+            if (!statusList.Any())
+            {
+                _logger.LogWarning("No statuses available in the database");
+            }
+            if (!customerList.Any())
+            {
+                _logger.LogWarning("No customers available in the database");
+            }
+            if (!managerList.Any())
+            {
+                _logger.LogWarning("No project managers available in the database");
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error populating dropdown lists");
+            ViewBag.Statuses = new List<StatusModel>();
+            ViewBag.Customers = new List<CustomerModel>();
+            ViewBag.ProjectManagers = new List<ProjectManagerModel>();
+            throw;
+        }
     }
 
     private static ProjectViewModel MapToViewModel(ProjectModel project)

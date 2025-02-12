@@ -1,36 +1,56 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Pro.Structure.Core.Entities;
 
 namespace Pro.Structure.Infrastructure.Data;
 
 public static class ApplicationDbContextSeed
 {
-    public static async Task SeedAsync(ApplicationDbContext context)
+    public static async Task SeedAsync(ApplicationDbContext context, ILogger logger)
     {
         try
         {
             // Only apply migrations if we're not in memory
             if (context.Database.IsSqlite())
             {
+                logger.LogInformation("Applying migrations...");
                 await context.Database.MigrateAsync();
             }
 
             // Seed Statuses
             if (!await context.Statuses.AnyAsync())
             {
-                await context.Statuses.AddRangeAsync(GetPreconfiguredStatuses());
+                logger.LogInformation("Seeding statuses...");
+                var statuses = GetPreconfiguredStatuses();
+                await context.Statuses.AddRangeAsync(statuses);
                 await context.SaveChangesAsync();
+                logger.LogInformation("Successfully seeded {Count} statuses", statuses.Count());
+            }
+            else
+            {
+                logger.LogInformation("Statuses already exist in database");
             }
 
             // Seed Project Managers
             if (!await context.ProjectManagers.AnyAsync())
             {
-                await context.ProjectManagers.AddRangeAsync(GetPreconfiguredProjectManagers());
+                logger.LogInformation("Seeding project managers...");
+                var managers = GetPreconfiguredProjectManagers();
+                await context.ProjectManagers.AddRangeAsync(managers);
                 await context.SaveChangesAsync();
+                logger.LogInformation(
+                    "Successfully seeded {Count} project managers",
+                    managers.Count()
+                );
+            }
+            else
+            {
+                logger.LogInformation("Project managers already exist in database");
             }
         }
         catch (Exception ex)
         {
+            logger.LogError(ex, "Error seeding database");
             throw new Exception($"Error seeding database: {ex.Message}", ex);
         }
     }
@@ -67,14 +87,14 @@ public static class ApplicationDbContextSeed
             {
                 FirstName = "John",
                 LastName = "Doe",
-                Email = "john.doe@prostructure.com",
+                Email = "john.doe@example.com",
                 PhoneNumber = "+1234567890",
             },
             new ProjectManager
             {
                 FirstName = "Jane",
                 LastName = "Smith",
-                Email = "jane.smith@prostructure.com",
+                Email = "jane.smith@example.com",
                 PhoneNumber = "+1234567891",
             },
         };
