@@ -172,8 +172,7 @@ body {
     [data-bs-theme="dark"] .navbar,
     [data-bs-theme="dark"] .navbar.navbar-dark {
       background-color: #212529 !important;
-      border-color: var(--bs-border-color);
-      border-bottom: 1px solid var(--bs-border-color);
+      border-color: transparent;
       box-shadow: 0 2px 4px rgba(0, 0, 0, .2);
     }
     
@@ -229,12 +228,10 @@ body {
 
 [data-bs-theme="dark"] .footer {
   background-color: #2c3034;
-  border-color: var(--bs-border-color);
+  border-color: transparent;
     color: var(--bs-body-color);
-    }
-    
-    [data-bs-theme="dark"] .status-badge {
-      border: 1px solid var(--bs-border-color);
+  [data-bs-theme="dark"] .status-badge {
+    border: 1px solid var(--bs-border-color);
 }
 
 [data-bs-theme="dark"] .status-not-started {
