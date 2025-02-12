@@ -229,9 +229,10 @@ body {
 [data-bs-theme="dark"] .footer {
   background-color: #2c3034;
   border-color: transparent;
-    color: var(--bs-body-color);
-  [data-bs-theme="dark"] .status-badge {
-    border: 1px solid var(--bs-border-color);
+  color: var(--bs-body-color);
+}
+[data-bs-theme="dark"] .status-badge {
+  border: 1px solid var(--bs-border-color);
 }
 
 [data-bs-theme="dark"] .status-not-started {
