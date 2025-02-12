@@ -221,7 +221,7 @@ public class ProjectsController : BaseController
                     ? statusesResult.Data.ToList()
                     : new List<StatusModel>();
 
-            ViewBag.Statuses = statusList;
+            ViewBag.Statuses = new SelectList(statusList, "Id", "Name");
 
             // Get customers
             var customersResult = await _customerService.GetAllAsync();
@@ -230,7 +230,7 @@ public class ProjectsController : BaseController
                     ? customersResult.Data.ToList()
                     : new List<CustomerModel>();
 
-            ViewBag.Customers = customerList;
+            ViewBag.Customers = new SelectList(customerList, "Id", "Name");
 
             // Get project managers
             var managersResult = await _projectManagerService.GetAllAsync();
@@ -239,7 +239,7 @@ public class ProjectsController : BaseController
                     ? managersResult.Data.ToList()
                     : new List<ProjectManagerModel>();
 
-            ViewBag.ProjectManagers = managerList;
+            ViewBag.ProjectManagers = new SelectList(managerList, "Id", "FullName");
 
             if (!statusList.Any())
             {
@@ -257,9 +257,13 @@ public class ProjectsController : BaseController
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error populating dropdown lists");
-            ViewBag.Statuses = new List<StatusModel>();
-            ViewBag.Customers = new List<CustomerModel>();
-            ViewBag.ProjectManagers = new List<ProjectManagerModel>();
+            ViewBag.Statuses = new SelectList(new List<StatusModel>(), "Id", "Name");
+            ViewBag.Customers = new SelectList(new List<CustomerModel>(), "Id", "Name");
+            ViewBag.ProjectManagers = new SelectList(
+                new List<ProjectManagerModel>(),
+                "Id",
+                "FullName"
+            );
             throw;
         }
     }

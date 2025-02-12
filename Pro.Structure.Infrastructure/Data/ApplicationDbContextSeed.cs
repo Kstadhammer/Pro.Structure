@@ -56,7 +56,7 @@ public static class ApplicationDbContextSeed
                 {
                     Email = "admin@prostructure.com",
                     Username = "admin",
-                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin123!"),
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("admin"),
                     FirstName = "Admin",
                     LastName = "User",
                     Role = "Admin",

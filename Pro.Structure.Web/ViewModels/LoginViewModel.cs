@@ -4,8 +4,8 @@ namespace Pro.Structure.Web.ViewModels;
 
 public class LoginViewModel
 {
-    [Required(ErrorMessage = "Email is required")]
-    [EmailAddress(ErrorMessage = "Invalid email address")]
+    [Required(ErrorMessage = "Email or username is required")]
+    [Display(Name = "Email or Username")]
     public string Email { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "Password is required")]

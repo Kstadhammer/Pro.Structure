@@ -24,7 +24,9 @@ public class AuthService : IAuthService
     {
         try
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            var user = await _context.Users.FirstOrDefaultAsync(u =>
+                u.Email == email || u.Username == email
+            );
 
             if (user == null)
                 return ServiceResponse<string>.Fail("Invalid email or password");

@@ -116,8 +116,9 @@ A modern project management system built for Mattin-Lassei Group AB. The system 
    ```
 
 ### Default Admin Account
-- Email: admin@prostructure.com
-- Password: Admin123!
+- Username: `admin`
+- Email: `admin@prostructure.com`
+- Password: `admin`
 
 ## Development Credits
 
