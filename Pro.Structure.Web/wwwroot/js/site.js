@@ -3,37 +3,43 @@
 
 // Write your JavaScript code.
 
-// Dark mode functionality
-document.addEventListener('DOMContentLoaded', () => {
+// Theme handling
+document.addEventListener('DOMContentLoaded', function () {
     const darkModeToggle = document.getElementById('darkModeToggle');
     const html = document.documentElement;
-    const darkModeIcon = darkModeToggle.querySelector('i');
+    const icon = darkModeToggle.querySelector('i');
     
-    // Check for saved dark mode preference
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-        html.setAttribute('data-bs-theme', savedTheme);
-        updateIcon(savedTheme === 'dark');
-    }
+    // Load saved theme preference
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    html.setAttribute('data-bs-theme', savedTheme);
+    updateThemeUI(savedTheme === 'dark');
 
-    // Toggle dark mode
-    darkModeToggle.addEventListener('click', () => {
-        const currentTheme = html.getAttribute('data-bs-theme');
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    darkModeToggle.addEventListener('click', function () {
+        const isDark = html.getAttribute('data-bs-theme') === 'dark';
+        const newTheme = isDark ? 'light' : 'dark';
         
-        html.setAttribute('data-bs-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
-        updateIcon(newTheme === 'dark');
+        // Animate icon
+        icon.style.transform = 'scale(0)';
+        
+        setTimeout(() => {
+            // Update theme
+            html.setAttribute('data-bs-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeUI(!isDark);
+            
+            // Animate icon back
+            icon.style.transform = 'scale(1)';
+        }, 150);
     });
-
-    // Update icon based on theme
-    function updateIcon(isDark) {
-        if (isDark) {
-            darkModeIcon.classList.remove('bi-moon-stars');
-            darkModeIcon.classList.add('bi-sun');
-        } else {
-            darkModeIcon.classList.remove('bi-sun');
-            darkModeIcon.classList.add('bi-moon-stars');
-        }
-    }
 });
+
+function updateThemeUI(isDark) {
+    const icon = document.querySelector('#darkModeToggle i');
+    icon.className = isDark ? 'bi bi-sun-fill' : 'bi bi-moon-stars-fill';
+    
+    const toggle = document.getElementById('darkModeToggle');
+    toggle.setAttribute('title', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+    
+    // Add transition for icon
+    icon.style.transition = 'transform 0.3s ease';
+}

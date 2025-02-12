@@ -106,6 +106,14 @@ public class CustomersController : BaseController
                 return HandleNotFound(result.Message);
 
             var viewModel = MapToViewModel(result.Data);
+
+            // Fetch project count for the customer
+            var projectsResult = await _projectService.GetProjectsByCustomerAsync(id);
+            if (projectsResult.Success)
+            {
+                viewModel.ProjectCount = projectsResult.Data.Count();
+            }
+
             return View(viewModel);
         }
         catch (Exception ex)
