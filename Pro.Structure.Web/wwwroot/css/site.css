@@ -176,6 +176,10 @@ body {
       box-shadow: 0 2px 4px rgba(0, 0, 0, .2);
     }
     
+                [data-bs-theme="dark"] .navbar .container {
+                  background-color: transparent;
+                  border-color: transparent;
+                }
     [data-bs-theme="dark"] .navbar-brand,
     [data-bs-theme="dark"] .nav-link,
     [data-bs-theme="dark"] .navbar-dark .navbar-brand,
@@ -196,15 +200,16 @@ body {
 
 [data-bs-theme="dark"] .card {
   background-color: #2c3034;
-  border-color: var(--bs-border-color);
+  border-color: transparent;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .2);
 }
 
 [data-bs-theme="dark"] .table {
   --bs-table-bg: #2c3034;
   --bs-table-color: #dee2e6;
-  --bs-table-border-color: #495057;
+  --bs-table-border-color: transparent;
   --bs-table-striped-bg: #343a40;
-    --bs-table-striped-color: #dee2e6;
+  --bs-table-striped-color: #dee2e6;
     --bs-table-hover-bg: #343a40;
     --bs-table-hover-color: #dee2e6;
 }
@@ -212,13 +217,13 @@ body {
 [data-bs-theme="dark"] .table th {
   background-color: #212529;
   color: #dee2e6;
-  border-color: #495057;
+  border-color: transparent;
 }
 
 [data-bs-theme="dark"] .table td {
   background-color: #2c3034;
   color: #dee2e6;
-  border-color: #495057;
+  border-color: transparent;
 }
 
 [data-bs-theme="dark"] .table-hover tbody tr:hover {
@@ -230,6 +235,10 @@ body {
   background-color: #2c3034;
   border-color: transparent;
   color: var(--bs-body-color);
+}
+[data-bs-theme="dark"] .footer .container {
+  background-color: transparent;
+  border-color: transparent;
 }
 [data-bs-theme="dark"] .status-badge {
   border: 1px solid var(--bs-border-color);
