@@ -53,8 +53,7 @@
 
                     <div class="mb-3">
                         <label asp-for="StatusId" class="form-label"></label>
-                        <select asp-for="StatusId" class="form-select"
-                            asp-items="@(ViewBag.Statuses != null ? new SelectList(ViewBag.Statuses, "Id", "Name") : new SelectList(new List<StatusModel>(), "Id", "Name"))">
+                        <select asp-for="StatusId" class="form-select" asp-items="ViewBag.Statuses">
                             <option value="">-- Select Status --</option>
                         </select>
                         <span asp-validation-for="StatusId" class="text-danger"></span>
@@ -86,8 +85,7 @@
 
                     <div class="mb-3">
                         <label asp-for="CustomerId" class="form-label"></label>
-                        <select asp-for="CustomerId" class="form-select"
-                            asp-items="@(ViewBag.Customers != null ? new SelectList(ViewBag.Customers, "Id", "Name") : new SelectList(new List<CustomerModel>(), "Id", "Name"))">
+                        <select asp-for="CustomerId" class="form-select" asp-items="ViewBag.Customers">
                             <option value="">-- Select Customer --</option>
                         </select>
                         <span asp-validation-for="CustomerId" class="text-danger"></span>
@@ -95,8 +93,7 @@
 
                     <div class="mb-3">
                         <label asp-for="ProjectManagerId" class="form-label"></label>
-                        <select asp-for="ProjectManagerId" class="form-select"
-                            asp-items="@(ViewBag.ProjectManagers != null ? new SelectList(ViewBag.ProjectManagers, "Id", "FullName") : new SelectList(new List<ProjectManagerModel>(), "Id", "FullName"))">
+                        <select asp-for="ProjectManagerId" class="form-select" asp-items="ViewBag.ProjectManagers">
                             <option value="">-- Select Project Manager --</option>
                         </select>
                         <span asp-validation-for="ProjectManagerId" class="text-danger"></span>

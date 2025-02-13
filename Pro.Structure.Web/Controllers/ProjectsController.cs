@@ -135,6 +135,25 @@ public class ProjectsController : BaseController
 
             // Finally, map to view model and return the view
             var viewModel = MapToViewModel(result.Data);
+
+            // Double check that ViewBag values are set
+            if (ViewBag.Statuses == null)
+            {
+                ViewBag.Statuses = new SelectList(new List<StatusModel>(), "Id", "Name");
+            }
+            if (ViewBag.Customers == null)
+            {
+                ViewBag.Customers = new SelectList(new List<CustomerModel>(), "Id", "Name");
+            }
+            if (ViewBag.ProjectManagers == null)
+            {
+                ViewBag.ProjectManagers = new SelectList(
+                    new List<ProjectManagerModel>(),
+                    "Id",
+                    "FullName"
+                );
+            }
+
             return View(viewModel);
         }
         catch (Exception ex)
@@ -157,21 +176,54 @@ public class ProjectsController : BaseController
             {
                 // Repopulate dropdown lists if validation fails
                 await PopulateDropDownLists();
+
+                // Double check that ViewBag values are set
+                if (ViewBag.Statuses == null)
+                {
+                    ViewBag.Statuses = new SelectList(new List<StatusModel>(), "Id", "Name");
+                }
+                if (ViewBag.Customers == null)
+                {
+                    ViewBag.Customers = new SelectList(new List<CustomerModel>(), "Id", "Name");
+                }
+                if (ViewBag.ProjectManagers == null)
+                {
+                    ViewBag.ProjectManagers = new SelectList(
+                        new List<ProjectManagerModel>(),
+                        "Id",
+                        "FullName"
+                    );
+                }
+
                 return View(viewModel);
             }
 
+            // Get the existing project to preserve created date and ensure it exists
+            var existingProject = await _projectService.GetByIdAsync(id);
+            if (!existingProject.Success)
+                return HandleNotFound(existingProject.Message);
+
             var project = MapToEntity(viewModel);
+            project.Created = existingProject.Data.Created;
+            project.Modified = DateTime.Now;
+
             var result = await _projectService.UpdateAsync(project);
             if (!result.Success)
-                return HandleError(new Exception(result.Message));
+            {
+                _logger.LogError("Failed to update project: {Message}", result.Message);
+                ModelState.AddModelError(string.Empty, result.Message);
+                await PopulateDropDownLists();
+                return View(viewModel);
+            }
 
             return RedirectToAction(nameof(Index));
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error in Edit POST action for project {ProjectId}", id);
-            await PopulateDropDownLists(); // Repopulate lists if there's an error
-            return HandleError(ex);
+            ModelState.AddModelError(string.Empty, $"Error updating project: {ex.Message}");
+            await PopulateDropDownLists();
+            return View(viewModel);
         }
     }
 
@@ -214,13 +266,12 @@ public class ProjectsController : BaseController
     {
         try
         {
-            // Get statuses first since they're required
+            // Get statuses
             var statusesResult = await _statusService.GetAllAsync();
             var statusList =
                 statusesResult.Success && statusesResult.Data != null
                     ? statusesResult.Data.ToList()
                     : new List<StatusModel>();
-
             ViewBag.Statuses = new SelectList(statusList, "Id", "Name");
 
             // Get customers
@@ -229,7 +280,6 @@ public class ProjectsController : BaseController
                 customersResult.Success && customersResult.Data != null
                     ? customersResult.Data.ToList()
                     : new List<CustomerModel>();
-
             ViewBag.Customers = new SelectList(customerList, "Id", "Name");
 
             // Get project managers
@@ -238,25 +288,36 @@ public class ProjectsController : BaseController
                 managersResult.Success && managersResult.Data != null
                     ? managersResult.Data.ToList()
                     : new List<ProjectManagerModel>();
-
             ViewBag.ProjectManagers = new SelectList(managerList, "Id", "FullName");
 
+            // Log warnings if any of the lists are empty
             if (!statusList.Any())
             {
-                _logger.LogWarning("No statuses available in the database");
+                _logger.LogWarning(
+                    "No statuses available: {Message}",
+                    statusesResult.Success ? "Empty list" : statusesResult.Message
+                );
             }
             if (!customerList.Any())
             {
-                _logger.LogWarning("No customers available in the database");
+                _logger.LogWarning(
+                    "No customers available: {Message}",
+                    customersResult.Success ? "Empty list" : customersResult.Message
+                );
             }
             if (!managerList.Any())
             {
-                _logger.LogWarning("No project managers available in the database");
+                _logger.LogWarning(
+                    "No project managers available: {Message}",
+                    managersResult.Success ? "Empty list" : managersResult.Message
+                );
             }
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error populating dropdown lists");
+
+            // Ensure ViewBag properties are never null
             ViewBag.Statuses = new SelectList(new List<StatusModel>(), "Id", "Name");
             ViewBag.Customers = new SelectList(new List<CustomerModel>(), "Id", "Name");
             ViewBag.ProjectManagers = new SelectList(
@@ -264,7 +325,6 @@ public class ProjectsController : BaseController
                 "Id",
                 "FullName"
             );
-            throw;
         }
     }
 
@@ -296,7 +356,7 @@ public class ProjectsController : BaseController
         {
             Id = viewModel.Id,
             ProjectNumber = viewModel.ProjectNumber ?? string.Empty,
-            Name = viewModel.Name,
+            Name = viewModel.Name ?? string.Empty,
             StartDate = viewModel.StartDate,
             EndDate = viewModel.EndDate,
             HourlyRate = viewModel.HourlyRate,

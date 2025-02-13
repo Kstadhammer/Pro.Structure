@@ -65,12 +65,21 @@ public class BaseRepository<T> : IBaseRepository<T>
     {
         try
         {
-            entity.Modified = DateTime.Now;
-            _dbSet.Update(entity);
+            var existingEntity = await _dbSet.FindAsync(entity.Id);
+            if (existingEntity == null)
+                return false;
+
+            _context.Entry(existingEntity).CurrentValues.SetValues(entity);
             return await _context.SaveChangesAsync() > 0;
         }
         catch
         {
+            // Detach the entity in case it's being tracked
+            var entry = _context.Entry(entity);
+            if (entry.State != EntityState.Detached)
+            {
+                entry.State = EntityState.Detached;
+            }
             return false;
         }
     }
