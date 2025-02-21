@@ -2,12 +2,13 @@
  * File: IBaseRepository.cs
  * Purpose: Defines the base repository interface for data access operations
  * Location: Pro.Structure.Core/Interfaces
- * 
+ *
  * This interface provides a contract for basic CRUD (Create, Read, Update, Delete) operations
  * that all repositories in the system must implement. It ensures consistent data access patterns
  * across different entity types.
  */
 
+using System.Linq.Expressions;
 using Pro.Structure.Core.Entities;
 
 namespace Pro.Structure.Core.Interfaces;
@@ -31,6 +32,13 @@ public interface IBaseRepository<T>
     /// <param name="id">The unique identifier of the entity</param>
     /// <returns>The entity if found, null otherwise</returns>
     Task<T?> GetByIdAsync(int id);
+
+    /// <summary>
+    /// Retrieves a single entity based on a predicate expression
+    /// </summary>
+    /// <param name="expression">The predicate expression to filter by</param>
+    /// <returns>The entity if found, null otherwise</returns>
+    Task<T?> GetAsync(Expression<Func<T, bool>> expression);
 
     /// <summary>
     /// Adds a new entity to the repository

@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using Pro.Structure.Core.Entities;
 using Pro.Structure.Core.Interfaces;
@@ -8,7 +9,7 @@ namespace Pro.Structure.Infrastructure.Repositories;
 /// <summary>
 /// Generic base repository implementing common CRUD operations.
 /// Provides basic database operations for all entity types.
-/// 
+///
 /// This implementation was developed with AI assistance for:
 /// - Entity Framework Core best practices
 /// - Error handling and recovery
@@ -48,6 +49,16 @@ public class BaseRepository<T> : IBaseRepository<T>
     }
 
     /// <summary>
+    /// Retrieves a single entity based on a predicate expression.
+    /// Returns null if not found.
+    /// Implementation assisted by AI for efficient querying.
+    /// </summary>
+    public virtual async Task<T?> GetAsync(Expression<Func<T, bool>> expression)
+    {
+        return await _dbSet.FirstOrDefaultAsync(expression);
+    }
+
+    /// <summary>
     /// Adds a new entity to the database.
     /// Returns true if successful, false if failed.
     /// Implementation assisted by AI for proper error handling
@@ -70,7 +81,7 @@ public class BaseRepository<T> : IBaseRepository<T>
     /// Updates an existing entity in the database.
     /// Automatically updates the Modified timestamp.
     /// Returns true if successful, false if failed.
-    /// 
+    ///
     /// Implementation assisted by AI for:
     /// - Entity state management
     /// - Optimistic concurrency handling

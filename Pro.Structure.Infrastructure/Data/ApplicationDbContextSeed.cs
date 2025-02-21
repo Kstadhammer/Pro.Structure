@@ -6,7 +6,7 @@ namespace Pro.Structure.Infrastructure.Data;
 
 /// <summary>
 /// Handles database seeding operations for the application.
-/// 
+///
 /// This implementation was developed with AI assistance for:
 /// - Database migration management
 /// - Secure password hashing
@@ -61,6 +61,20 @@ public static class ApplicationDbContextSeed
             else
             {
                 logger.LogInformation("Project managers already exist in database");
+            }
+
+            // Seed Customers
+            if (!await context.Customers.AnyAsync())
+            {
+                logger.LogInformation("Seeding customers...");
+                var customers = GetPreconfiguredCustomers();
+                await context.Customers.AddRangeAsync(customers);
+                await context.SaveChangesAsync();
+                logger.LogInformation("Successfully seeded {Count} customers", customers.Count());
+            }
+            else
+            {
+                logger.LogInformation("Customers already exist in database");
             }
 
             // Seed Admin User
@@ -146,6 +160,30 @@ public static class ApplicationDbContextSeed
                 LastName = "Smith",
                 Email = "jane.smith@example.com",
                 PhoneNumber = "+1234567891",
+            },
+        };
+    }
+
+    /// <summary>
+    /// Provides preconfigured customer entities.
+    /// Implementation assisted by AI for data structure
+    /// and validation patterns.
+    /// </summary>
+    private static IEnumerable<Customer> GetPreconfiguredCustomers()
+    {
+        return new List<Customer>
+        {
+            new Customer
+            {
+                Name = "Alice Johnson",
+                Email = "alice.johnson@customer.com",
+                PhoneNumber = "+1234567892",
+            },
+            new Customer
+            {
+                Name = "Bob Anderson",
+                Email = "bob.anderson@customer.com",
+                PhoneNumber = "+1234567893",
             },
         };
     }

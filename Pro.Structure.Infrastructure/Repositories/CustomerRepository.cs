@@ -7,7 +7,7 @@ namespace Pro.Structure.Infrastructure.Repositories;
 
 /// <summary>
 /// Repository implementation for Customer entity.
-/// 
+///
 /// This implementation was developed with AI assistance for:
 /// - Efficient eager loading of related entities
 /// - Email-based customer lookup and validation

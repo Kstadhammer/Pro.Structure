@@ -7,7 +7,7 @@ namespace Pro.Structure.Infrastructure.Repositories;
 
 /// <summary>
 /// Repository implementation for ProjectManager entity.
-/// 
+///
 /// This implementation was developed with AI assistance for:
 /// - Efficient eager loading of related projects
 /// - Email-based manager lookup and validation
