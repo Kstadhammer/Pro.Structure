@@ -9,6 +9,14 @@ using Pro.Structure.Infrastructure.Data;
 
 namespace Pro.Structure.Infrastructure.Services;
 
+/// <summary>
+/// Implementation of authentication and authorization services.
+/// This implementation was developed with significant AI assistance for:
+/// - Security best practices
+/// - Password hashing and verification
+/// - Account lockout mechanisms
+/// - Error handling and logging patterns
+/// </summary>
 public class AuthService : IAuthService
 {
     private readonly ApplicationDbContext _context;
@@ -20,6 +28,10 @@ public class AuthService : IAuthService
         _logger = logger;
     }
 
+    /// <summary>
+    /// Authenticates a user and manages login attempts.
+    /// Implementation assisted by AI for secure password verification and account lockout logic.
+    /// </summary>
     public async Task<ServiceResponse<string>> LoginAsync(string email, string password)
     {
         try
@@ -69,6 +81,10 @@ public class AuthService : IAuthService
         }
     }
 
+    /// <summary>
+    /// Registers a new user account.
+    /// Implementation assisted by AI for secure password hashing and duplicate checking.
+    /// </summary>
     public async Task<ServiceResponse<int>> RegisterAsync(
         string email,
         string username,
@@ -106,6 +122,10 @@ public class AuthService : IAuthService
         }
     }
 
+    /// <summary>
+    /// Changes a user's password.
+    /// Implementation assisted by AI for secure password verification and update process.
+    /// </summary>
     public async Task<ServiceResponse<bool>> ChangePasswordAsync(
         int userId,
         string currentPassword,
@@ -134,6 +154,10 @@ public class AuthService : IAuthService
         }
     }
 
+    /// <summary>
+    /// Initiates a password reset process.
+    /// Implementation assisted by AI for secure token generation and email handling.
+    /// </summary>
     public async Task<ServiceResponse<bool>> ResetPasswordAsync(string email)
     {
         try
@@ -156,12 +180,20 @@ public class AuthService : IAuthService
         }
     }
 
+    /// <summary>
+    /// Validates a password reset token.
+    /// TODO: Implementation pending, will be assisted by AI for secure token validation.
+    /// </summary>
     public async Task<ServiceResponse<bool>> ValidateResetTokenAsync(string email, string token)
     {
         // TODO: Implement token validation
         return ServiceResponse<bool>.Fail("Not implemented");
     }
 
+    /// <summary>
+    /// Locks a user account.
+    /// Implementation assisted by AI for proper account state management.
+    /// </summary>
     public async Task<ServiceResponse<bool>> LockoutUserAsync(string email)
     {
         try
@@ -183,6 +215,10 @@ public class AuthService : IAuthService
         }
     }
 
+    /// <summary>
+    /// Unlocks a user account.
+    /// Implementation assisted by AI for proper account state reset.
+    /// </summary>
     public async Task<ServiceResponse<bool>> UnlockUserAsync(string email)
     {
         try
@@ -206,6 +242,10 @@ public class AuthService : IAuthService
         }
     }
 
+    /// <summary>
+    /// Updates a user's profile information.
+    /// Implementation assisted by AI for secure data handling and validation.
+    /// </summary>
     public async Task<ServiceResponse<bool>> UpdateUserAsync(
         int userId,
         string? firstName,

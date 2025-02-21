@@ -4,6 +4,11 @@ using Pro.Structure.Core.Models;
 
 namespace Pro.Structure.Infrastructure.Services;
 
+/// <summary>
+/// Base service implementation that provides common CRUD operations for all entities.
+/// This implementation was developed with AI assistance for error handling patterns
+/// and ServiceResponse integration.
+/// </summary>
 public class BaseService<T> : IBaseService<T>
     where T : BaseEntity
 {
@@ -14,6 +19,10 @@ public class BaseService<T> : IBaseService<T>
         _repository = repository;
     }
 
+    /// <summary>
+    /// Retrieves all entities of type T.
+    /// Implementation assisted by AI for proper error handling and response formatting.
+    /// </summary>
     public virtual async Task<ServiceResponse<IEnumerable<T>>> GetAllAsync()
     {
         try
@@ -27,6 +36,10 @@ public class BaseService<T> : IBaseService<T>
         }
     }
 
+    /// <summary>
+    /// Retrieves a single entity by its identifier.
+    /// Implementation assisted by AI for proper error handling and null checking.
+    /// </summary>
     public virtual async Task<ServiceResponse<T>> GetByIdAsync(int id)
     {
         try
@@ -43,6 +56,10 @@ public class BaseService<T> : IBaseService<T>
         }
     }
 
+    /// <summary>
+    /// Adds a new entity to the system.
+    /// Implementation assisted by AI for proper error handling and success verification.
+    /// </summary>
     public virtual async Task<ServiceResponse<T>> AddAsync(T entity)
     {
         try
@@ -59,6 +76,10 @@ public class BaseService<T> : IBaseService<T>
         }
     }
 
+    /// <summary>
+    /// Updates an existing entity in the system.
+    /// Implementation assisted by AI for proper error handling and success verification.
+    /// </summary>
     public virtual async Task<ServiceResponse<T>> UpdateAsync(T entity)
     {
         try
@@ -75,6 +96,10 @@ public class BaseService<T> : IBaseService<T>
         }
     }
 
+    /// <summary>
+    /// Deletes an entity from the system by its identifier.
+    /// Implementation assisted by AI for proper error handling and success verification.
+    /// </summary>
     public virtual async Task<ServiceResponse<bool>> DeleteAsync(int id)
     {
         try
@@ -91,6 +116,10 @@ public class BaseService<T> : IBaseService<T>
         }
     }
 
+    /// <summary>
+    /// Checks if an entity with the specified identifier exists in the system.
+    /// Implementation assisted by AI for proper error handling.
+    /// </summary>
     public virtual async Task<ServiceResponse<bool>> ExistsAsync(int id)
     {
         try

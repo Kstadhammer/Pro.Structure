@@ -6,6 +6,12 @@ namespace Pro.Structure.Infrastructure.Data;
 /// <summary>
 /// Main database context for the application.
 /// Handles all database operations and entity configurations.
+/// 
+/// This implementation was developed with AI assistance for:
+/// - Entity relationship configurations
+/// - Database constraints and validations
+/// - Index optimization
+/// - Security considerations for user data
 /// </summary>
 public class ApplicationDbContext : DbContext
 {
@@ -22,6 +28,12 @@ public class ApplicationDbContext : DbContext
     /// <summary>
     /// Configures the database model and relationships between entities.
     /// Sets up required fields, field lengths, and other constraints.
+    /// 
+    /// Implementation assisted by AI for:
+    /// - Optimal field length constraints
+    /// - Index creation for performance
+    /// - Relationship configurations
+    /// - Data integrity rules
     /// </summary>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -41,7 +53,7 @@ public class ApplicationDbContext : DbContext
         // ProjectManager configurations - Email is required for notifications
         modelBuilder.Entity<ProjectManager>().Property(pm => pm.Email).IsRequired();
 
-        // User configurations
+        // User configurations - AI assisted for security best practices
         modelBuilder.Entity<User>().Property(u => u.Email).IsRequired();
         modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
         modelBuilder.Entity<User>().Property(u => u.Username).IsRequired();

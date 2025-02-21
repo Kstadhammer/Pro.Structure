@@ -4,8 +4,23 @@ using Pro.Structure.Core.Entities;
 
 namespace Pro.Structure.Infrastructure.Data;
 
+/// <summary>
+/// Handles database seeding operations for the application.
+/// 
+/// This implementation was developed with AI assistance for:
+/// - Database migration management
+/// - Secure password hashing
+/// - Data consistency checks
+/// - Error handling and logging
+/// - Initial data seeding strategy
+/// </summary>
 public static class ApplicationDbContextSeed
 {
+    /// <summary>
+    /// Seeds the database with initial data.
+    /// Implementation assisted by AI for proper transaction handling
+    /// and data validation.
+    /// </summary>
     public static async Task SeedAsync(ApplicationDbContext context, ILogger logger)
     {
         try
@@ -80,6 +95,11 @@ public static class ApplicationDbContextSeed
         }
     }
 
+    /// <summary>
+    /// Provides preconfigured status entities.
+    /// Implementation assisted by AI for comprehensive
+    /// status definitions and descriptions.
+    /// </summary>
     private static IEnumerable<Status> GetPreconfiguredStatuses()
     {
         return new List<Status>
@@ -104,6 +124,11 @@ public static class ApplicationDbContextSeed
         };
     }
 
+    /// <summary>
+    /// Provides preconfigured project manager entities.
+    /// Implementation assisted by AI for data structure
+    /// and validation patterns.
+    /// </summary>
     private static IEnumerable<ProjectManager> GetPreconfiguredProjectManagers()
     {
         return new List<ProjectManager>

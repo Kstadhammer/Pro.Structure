@@ -4,8 +4,22 @@ using Pro.Structure.Core.Models;
 
 namespace Pro.Structure.Infrastructure.Factories;
 
+/// <summary>
+/// Factory for converting between Project entities and ProjectModel DTOs.
+/// 
+/// This implementation was developed with AI assistance for:
+/// - Proper mapping of complex relationships
+/// - Handling of navigation properties
+/// - Date/time management
+/// - Composite field generation
+/// </summary>
 public class ProjectFactory : IFactory<Project, ProjectModel>
 {
+    /// <summary>
+    /// Creates a Project entity from a ProjectModel.
+    /// Implementation assisted by AI for proper property mapping
+    /// and timestamp management.
+    /// </summary>
     public Project CreateEntity(ProjectModel model)
     {
         return new Project
@@ -25,6 +39,11 @@ public class ProjectFactory : IFactory<Project, ProjectModel>
         };
     }
 
+    /// <summary>
+    /// Creates a ProjectModel from a Project entity.
+    /// Implementation assisted by AI for handling navigation properties
+    /// and creating composite fields like ProjectManagerName.
+    /// </summary>
     public ProjectModel CreateModel(Project entity)
     {
         return new ProjectModel

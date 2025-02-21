@@ -8,6 +8,10 @@ namespace Pro.Structure.Infrastructure.Data;
 /// <summary>
 /// Implementation of the Unit of Work pattern for managing database transactions.
 /// This class ensures that multiple database operations are executed atomically.
+/// 
+/// Note: This implementation was developed with significant assistance from AI,
+/// particularly for the transaction management logic and error handling patterns.
+/// The AI helped ensure proper transaction lifecycle management and resource cleanup.
 /// </summary>
 public class UnitOfWork : IUnitOfWork
 {
@@ -21,6 +25,7 @@ public class UnitOfWork : IUnitOfWork
 
     /// <summary>
     /// Begins a new database transaction. Throws if a transaction is already in progress.
+    /// Implementation assisted by AI for proper transaction state management.
     /// </summary>
     public async Task BeginTransactionAsync(
         IsolationLevel isolationLevel = IsolationLevel.ReadCommitted
@@ -37,6 +42,7 @@ public class UnitOfWork : IUnitOfWork
     /// <summary>
     /// Commits the current transaction and saves all changes to the database.
     /// If any step fails, the transaction is automatically rolled back.
+    /// Implementation assisted by AI for proper error handling and resource cleanup.
     /// </summary>
     public async Task CommitAsync()
     {
@@ -70,6 +76,7 @@ public class UnitOfWork : IUnitOfWork
 
     /// <summary>
     /// Rolls back the current transaction, undoing all changes made within it.
+    /// Implementation assisted by AI for proper error handling and cleanup.
     /// </summary>
     public async Task RollbackAsync()
     {
@@ -94,6 +101,7 @@ public class UnitOfWork : IUnitOfWork
     /// <summary>
     /// Executes an operation within a transaction and returns its result.
     /// Automatically handles transaction lifecycle and rollback on failure.
+    /// Implementation fully assisted by AI for robust transaction management.
     /// </summary>
     public async Task<T> ExecuteInTransactionAsync<T>(
         Func<Task<T>> operation,
@@ -117,6 +125,7 @@ public class UnitOfWork : IUnitOfWork
     /// <summary>
     /// Executes an operation within a transaction without returning a result.
     /// Automatically handles transaction lifecycle and rollback on failure.
+    /// Implementation fully assisted by AI for robust transaction management.
     /// </summary>
     public async Task ExecuteInTransactionAsync(
         Func<Task> operation,
